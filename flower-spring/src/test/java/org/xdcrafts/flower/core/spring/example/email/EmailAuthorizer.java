@@ -19,7 +19,6 @@ package org.xdcrafts.flower.core.spring.example.email;
 import org.xdcrafts.flower.core.spring.example.Authenticator;
 import org.xdcrafts.flower.core.spring.example.Roles;
 import org.xdcrafts.flower.core.spring.example.User;
-import org.xdcrafts.flower.core.utils.MapApi;
 
 import java.util.Map;
 
@@ -38,7 +37,7 @@ public class EmailAuthorizer {
     }
 
     public Map authorize(Map request) {
-        final User user = MapApi.DotNotation.dotGetUnsafe(request, User.class, Authenticator.Keywords.USER);
+        final User user = dotGetUnsafe(request, User.class, Authenticator.Keywords.USER);
         if (!user.getRoles().contains(Roles.EMAIL)) {
             throw new RuntimeException("Unauthorized");
         }

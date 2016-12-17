@@ -16,8 +16,6 @@
 
 package org.xdcrafts.flower.core.spring.example;
 
-import org.xdcrafts.flower.core.utils.MapDsl;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +27,7 @@ import static org.xdcrafts.flower.core.utils.MapDsl.Mutable.with;
 public class Receiver {
 
     public Map receive(Map request) {
-        return MapDsl.Mutable.with(new HashMap())
+        return with(new HashMap())
             .assoc("data", request)
             .assoc("processed", true)
             .value();

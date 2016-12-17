@@ -22,8 +22,10 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.xdcrafts.flower.core.utils.MapApi.contains;
+import static org.xdcrafts.flower.core.utils.MapApi.getNullableString;
+import static org.xdcrafts.flower.core.utils.MapApi.getUnsafe;
 import static org.xdcrafts.flower.core.utils.MapDsl.Mutable.with;
-
 
 /**
  * Simple MapDsl tests.
@@ -32,16 +34,16 @@ public class MapDslTest {
 
     @Test
     public void test() {
-        final Map map = MapDsl.Mutable.with(new HashMap())
+        final Map map = with(new HashMap())
             .assoc(":user", ":firstname", "John")
             .assoc(":user", ":surname", "Doe")
             .assoc(":user", ":gender", true)
             .dissoc(":user", ":surname")
             .assoc(":user", ":lastname", "Doe")
             .value();
-        Assert.assertEquals("John", MapApi.getNullableString(map, ":user", ":firstname"));
-        Assert.assertEquals("Doe", MapApi.getNullableString(map, ":user", ":lastname"));
-        Assert.assertTrue(MapApi.getUnsafe(map, Boolean.class, ":user", ":gender"));
-        Assert.assertFalse(MapApi.contains(map, ":user", ":surname"));
+        Assert.assertEquals("John", getNullableString(map, ":user", ":firstname"));
+        Assert.assertEquals("Doe", getNullableString(map, ":user", ":lastname"));
+        Assert.assertTrue(getUnsafe(map, Boolean.class, ":user", ":gender"));
+        Assert.assertFalse(contains(map, ":user", ":surname"));
     }
 }

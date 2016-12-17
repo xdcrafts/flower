@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC "-//Puppy Crawl//DTD Suppressions 1.1//EN" "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+    <suppress checks="FileLength" files="org[\\/]springframework[\\/]"/>
+
+    <!-- Suppressions for unit testing code -->
+    <suppress checks="JavadocMethod" files="[/\\]test[/\\]java[/\\]"/>
+    <suppress checks="JavadocVariable" files="[/\\]test[/\\]java[/\\]"/>
+    <suppress checks="JavadocType" files="[/\\]test[/\\]java[/\\]"/>
+    <suppress checks="AvoidStarImport" files="[/\\]test[/\\]java[/\\]"/>
+</suppressions>

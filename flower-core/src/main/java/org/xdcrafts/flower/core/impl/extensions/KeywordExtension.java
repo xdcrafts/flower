@@ -18,7 +18,6 @@ package org.xdcrafts.flower.core.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.core.utils.MapDsl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class KeywordExtension implements Extension {
 
     public KeywordExtension(String name, String keywordValue, Action action) {
         this.name = name;
-        this.configuration = MapDsl.Mutable.with(new HashMap())
+        this.configuration = with(new HashMap())
             .assoc(ConfigurationKeys.KEYWORD_VALUE, keywordValue)
             .value();
         this.action = action;

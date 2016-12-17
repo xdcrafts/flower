@@ -23,7 +23,6 @@ import org.xdcrafts.flower.core.impl.extensions.KeywordExtension;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xdcrafts.flower.core.utils.MapDsl;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -78,10 +77,10 @@ public class FlowerTest {
             "aSwitch", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
         );
         final Map firstResult = keywordSwitchitch.apply(
-            MapDsl.Mutable.with(new HashMap()).assoc("data", "selectAction", "first").value()
+            with(new HashMap()).assoc("data", "selectAction", "first").value()
         );
         final Map secondResult = keywordSwitchitch.apply(
-            MapDsl.Mutable.with(new HashMap()).assoc("data", "selectAction", "second").value()
+            with(new HashMap()).assoc("data", "selectAction", "second").value()
         );
         assertTrue(getUnsafe(firstResult, Boolean.class, "data", "first"));
         assertTrue(getUnsafe(secondResult, Boolean.class, "data", "second"));

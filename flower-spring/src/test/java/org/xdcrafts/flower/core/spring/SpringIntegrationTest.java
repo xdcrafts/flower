@@ -24,8 +24,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.xdcrafts.flower.core.utils.MapApi;
-import org.xdcrafts.flower.core.utils.MapDsl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,20 +51,20 @@ public class SpringIntegrationTest {
 
     @Test
     public void smsTest() throws ExecutionException, InterruptedException {
-        final Map request = MapDsl.Mutable.with(new HashMap())
+        final Map request = with(new HashMap())
             .dotAssoc("auth.token", "secret-admin")
             .dotAssoc("request.type", "sms")
             .dotAssoc("number", "+78005555555")
             .dotAssoc("text", "spam")
             .value();
         final Map response = mainFlow.apply(request);
-        assertTrue(MapApi.DotNotation.dotGetUnsafe(response, Boolean.class, "processed"));
+        assertTrue(dotGetUnsafe(response, Boolean.class, "processed"));
         assertEquals(1, this.smsSender.getRequestsSent());
     }
 
     @Test
     public void emailTest() throws ExecutionException, InterruptedException {
-        final Map request = MapDsl.Mutable.with(new HashMap())
+        final Map request = with(new HashMap())
             .dotAssoc("auth.token", "secret-admin")
             .dotAssoc("request.type", "email")
             .dotAssoc("to", "to@example.com")
@@ -74,7 +72,7 @@ public class SpringIntegrationTest {
             .dotAssoc("text", "spam")
             .value();
         final Map response = mainFlow.apply(request);
-        assertTrue(MapApi.DotNotation.dotGetUnsafe(response, Boolean.class, "processed"));
+        assertTrue(dotGetUnsafe(response, Boolean.class, "processed"));
         assertEquals(1, this.emailSender.getRequestsSent());
     }
 }

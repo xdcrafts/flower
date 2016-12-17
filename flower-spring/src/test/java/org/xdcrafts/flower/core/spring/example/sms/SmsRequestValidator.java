@@ -16,9 +16,9 @@
 
 package org.xdcrafts.flower.core.spring.example.sms;
 
-import org.xdcrafts.flower.core.utils.MapApi;
-
 import java.util.Map;
+
+import static org.xdcrafts.flower.core.utils.MapApi.getString;
 
 /**
  * Sms request validator.
@@ -34,8 +34,8 @@ public class SmsRequestValidator {
     }
 
     public Map validate(Map request) {
-        MapApi.getString(request, Keywords.NUMBER).orElseThrow(() -> new RuntimeException("'number' is required field."));
-        MapApi.getString(request, Keywords.TEXT).orElseThrow(() -> new RuntimeException("'text' is required field."));
+        getString(request, Keywords.NUMBER).orElseThrow(() -> new RuntimeException("'number' is required field."));
+        getString(request, Keywords.TEXT).orElseThrow(() -> new RuntimeException("'text' is required field."));
         return request;
     }
 }

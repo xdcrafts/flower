@@ -18,7 +18,6 @@ package org.xdcrafts.flower.core.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.core.utils.MapDsl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class PredicateExtension implements Extension {
     public PredicateExtension(String name, Action action, Predicate<Map> predicate) {
         this.name = name;
         this.action = action;
-        this.configuration = MapDsl.Mutable.with(new HashMap())
+        this.configuration = with(new HashMap())
             .assoc(ConfigurationKeys.PREDICATE, predicate)
             .value();
     }
