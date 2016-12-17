@@ -2,11 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>flower-spring</artifactId>
-    <name>Flower Spring</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>org.xdcrafts</groupId>
+        <groupId>org.github.xdcrafts</groupId>
         <artifactId>flower</artifactId>
         <relativePath>..</relativePath>
         <version>1.0.0-SNAPSHOT</version>
@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.xdcrafts</groupId>
+            <groupId>org.github.xdcrafts</groupId>
             <artifactId>flower-core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
