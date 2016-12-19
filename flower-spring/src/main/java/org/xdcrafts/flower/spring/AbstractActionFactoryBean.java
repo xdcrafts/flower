@@ -18,14 +18,22 @@ package org.xdcrafts.flower.spring;
 
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
+import org.xdcrafts.flower.core.Middleware;
+
+import java.util.List;
 
 /**
  * Abstract bean factory that aware of bean name.
  * @param <T> class type
  */
-public abstract class AbstractBeanNameAwareFactoryBean<T> extends AbstractFactoryBean<T> implements BeanNameAware {
+public abstract class AbstractActionFactoryBean<T> extends AbstractFactoryBean<T> implements BeanNameAware {
 
+    private final List<Middleware> middlewares;
     private String beanName;
+
+    public AbstractActionFactoryBean(List<Middleware> middlewares) {
+        this.middlewares = middlewares;
+    }
 
     @Override
     public void setBeanName(String name) {
@@ -37,5 +45,9 @@ public abstract class AbstractBeanNameAwareFactoryBean<T> extends AbstractFactor
 
     public String getBeanName() {
         return this.beanName;
+    }
+
+    public List<Middleware> getMiddlewares() {
+        return middlewares;
     }
 }

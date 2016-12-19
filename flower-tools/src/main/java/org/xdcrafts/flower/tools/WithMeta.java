@@ -14,15 +14,17 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core;
+package org.xdcrafts.flower.tools;
+
+import java.util.Map;
 
 /**
- * Interface for entities that have a toggle switch: enabled/disabled.
+ * Interface for something that have meta-information.
  */
-public interface WithToggle {
+public interface WithMeta {
 
     /**
-     * Returns toggle state.
+     * Meta-information.
      */
-    boolean isEnabled();
+    Map<String, Object> meta();
 }

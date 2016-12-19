@@ -14,14 +14,21 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core;
+package org.xdcrafts.flower.tools;
 
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Middleware interface.
+ * AsFunction interface that can be represented as simple function.
+ * @param <A>
+ * @param <B>
  */
-public interface Middleware extends BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>> {
+public interface AsFunction<A, B> extends Function<A, B> {
+
+    /**
+     * Casts itself to function.
+     */
+    default Function<A, B> asFunction() {
+        return this;
+    }
 }

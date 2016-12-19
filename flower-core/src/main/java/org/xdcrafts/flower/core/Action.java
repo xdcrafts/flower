@@ -17,6 +17,8 @@
 package org.xdcrafts.flower.core;
 
 import org.xdcrafts.flower.core.impl.DefaultAction;
+import org.xdcrafts.flower.tools.AsFunction;
+import org.xdcrafts.flower.tools.Named;
 
 import java.util.Map;
 import java.util.function.Function;

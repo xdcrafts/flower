@@ -16,32 +16,40 @@
 
 package org.xdcrafts.flower.core.impl;
 
-import org.xdcrafts.flower.core.Action;
+import org.xdcrafts.flower.core.Middleware;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 /**
  * Basic implementation of action.
  */
-public class DefaultAction implements Action {
+public class DefaultAction extends ActionBase {
 
     private final String name;
-    private final Function<Map, Map> body;
+    private final Function<Map, Map> actionBody;
 
     public DefaultAction(String name, Function<Map, Map> body) {
-        this.name = name;
-        this.body = body;
+        this(name, body, Collections.emptyList());
     }
 
-    @Override
-    public Map apply(Map context) {
-        return this.body.apply(context);
+    public DefaultAction(String name, Function<Map, Map> body, List<Middleware> middlewares) {
+        super(middlewares);
+        this.actionBody = body;
+        this.name = name;
+        this.meta.put("name", name);
     }
 
     @Override
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public Map act(Map map) {
+        return this.actionBody.apply(map);
     }
 
     @Override

@@ -17,23 +17,31 @@
 package org.xdcrafts.flower.core.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
-import org.xdcrafts.flower.core.Extension;
+import org.xdcrafts.flower.core.Middleware;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Default implementation of Extension.
  */
-public class DefaultExtension implements Extension {
+public class DefaultExtension extends ExtensionBase {
 
     private final String name;
     private final Action action;
     private final Map configuration;
 
     public DefaultExtension(String name, Action action, Map configuration) {
+        this(name, action, configuration, Collections.emptyList());
+    }
+
+    public DefaultExtension(String name, Action action, Map configuration, List<Middleware> middlewares) {
+        super(middlewares);
         this.name = name;
         this.action = action;
         this.configuration = configuration;
+        this.meta.put("name", name);
     }
 
     @Override

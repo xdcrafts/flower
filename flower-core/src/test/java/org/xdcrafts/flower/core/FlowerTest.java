@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,18 +46,24 @@ public class FlowerTest {
 
     @Test
     public void test() {
-        final Middleware counterMiddleware = function -> ctx -> {
+        final Middleware counterMiddleware = (map, function) -> ctx -> {
             final int counter = get(ctx, Integer.class, "meta", "dummy").orElse(0);
             return function.apply(assoc(ctx, "meta", "dummy", counter + 1));
         };
         final Action firstAction = new DefaultAction(
-            "firstAction", counterMiddleware.apply(ctx -> assoc(ctx, "data", "first", true))
+            "firstAction",
+            ctx -> assoc(ctx, "data", "first", true),
+            Collections.singletonList(counterMiddleware)
         );
         final Action secondAction = new DefaultAction(
-            "secondAction", counterMiddleware.apply(ctx -> assoc(ctx, "data", "second", true))
+            "secondAction",
+            ctx -> assoc(ctx, "data", "second", true),
+            Collections.singletonList(counterMiddleware)
         );
         final Action thirdAction = new DefaultAction(
-            "thirdAction", counterMiddleware.apply(ctx -> assoc(ctx, "data", "third", true))
+            "thirdAction",
+            ctx -> assoc(ctx, "data", "third", true),
+            Collections.singletonList(counterMiddleware)
         );
         final Flow simpleFlow = new BasicSyncFlow("simpleFlow", Arrays.asList(firstAction, secondAction));
         final Flow complexFlow = new BasicSyncFlow("complexFlow", Arrays.asList(simpleFlow, thirdAction));

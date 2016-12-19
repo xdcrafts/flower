@@ -33,5 +33,5 @@ beans {
 
     // --------------------------------------- Flows ---------------------------------------
 
-    mainFlow BasicSyncFlowFactory, [authenticatorAction, switcher, receiverAction]
+    mainFlow BasicSyncFlowFactory, [authenticatorAction, switcher, receiverAction], [loggingMiddleware]
 }

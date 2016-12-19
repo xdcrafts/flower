@@ -17,18 +17,29 @@
 package org.xdcrafts.flower.spring.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
+import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.extensions.KeywordExtension;
-import org.xdcrafts.flower.spring.AbstractBeanNameAwareFactoryBean;
+import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Spring factory bean for keyword extension that uses bean name as it's name.
  */
-public class KeywordExtensionFactory extends AbstractBeanNameAwareFactoryBean<KeywordExtension> {
+public class KeywordExtensionFactory extends AbstractActionFactoryBean<KeywordExtension> {
 
     private final String keywordValue;
     private final Action action;
 
     public KeywordExtensionFactory(String keywordValue, Action action) {
+        super(Collections.emptyList());
+        this.keywordValue = keywordValue;
+        this.action = action;
+    }
+
+    public KeywordExtensionFactory(String keywordValue, Action action, List<Middleware> middlewares) {
+        super(middlewares);
         this.keywordValue = keywordValue;
         this.action = action;
     }
@@ -40,6 +51,6 @@ public class KeywordExtensionFactory extends AbstractBeanNameAwareFactoryBean<Ke
 
     @Override
     protected KeywordExtension createInstance() throws Exception {
-        return new KeywordExtension(getBeanName(), this.keywordValue, this.action);
+        return new KeywordExtension(getBeanName(), this.keywordValue, this.action, getMiddlewares());
     }
 }

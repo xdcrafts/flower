@@ -33,9 +33,4 @@ public interface Switch extends Action {
      * Makes decision about which action should proceed with processing of proposed context.
      */
     Action selectAction(Map context);
-
-    @Override
-    default Map apply(Map ctx) {
-        return selectAction(ctx).apply(ctx);
-    }
 }
