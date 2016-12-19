@@ -18,8 +18,8 @@ package org.xdcrafts.flower.core.spring.example;
 
 import java.util.Map;
 
-import static org.xdcrafts.flower.core.utils.MapApi.DotNotation.Mutable.dotAssoc;
-import static org.xdcrafts.flower.core.utils.MapApi.DotNotation.dotGetString;
+import static org.xdcrafts.flower.tools.MapApi.DotNotation.Mutable.dotAssoc;
+import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
 
 /**
  * Performs user authentication.

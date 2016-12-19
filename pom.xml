@@ -51,6 +51,7 @@
     </properties>
 
     <modules>
+        <module>flower-tools</module>
         <module>flower-core</module>
         <module>flower-spring</module>
     </modules>

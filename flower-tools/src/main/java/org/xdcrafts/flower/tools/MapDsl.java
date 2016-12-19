@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.utils;
+package org.xdcrafts.flower.tools;
 
 import java.util.Map;
 

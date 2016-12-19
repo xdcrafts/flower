@@ -22,7 +22,7 @@ import org.xdcrafts.flower.core.spring.example.User;
 
 import java.util.Map;
 
-import static org.xdcrafts.flower.core.utils.MapApi.DotNotation.dotGetUnsafe;
+import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetUnsafe;
 
 /**
  * Email authorizer.

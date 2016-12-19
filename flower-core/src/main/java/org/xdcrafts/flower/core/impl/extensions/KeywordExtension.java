@@ -22,7 +22,7 @@ import org.xdcrafts.flower.core.Extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.xdcrafts.flower.core.utils.MapDsl.Mutable.with;
+import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 
 /**
  * Keyword-based implementation of selectAction.

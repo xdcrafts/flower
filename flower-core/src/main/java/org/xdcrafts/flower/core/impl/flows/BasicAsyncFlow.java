@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
-import static org.xdcrafts.flower.core.utils.MapApi.Mutable.assoc;
+import static org.xdcrafts.flower.tools.MapApi.Mutable.assoc;
 
 /**
  * Basic implementation of asynchronous flow.

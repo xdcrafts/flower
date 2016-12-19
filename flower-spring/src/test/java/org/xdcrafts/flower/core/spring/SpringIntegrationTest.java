@@ -29,8 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import static org.xdcrafts.flower.core.utils.MapApi.DotNotation.dotGetUnsafe;
-import static org.xdcrafts.flower.core.utils.MapDsl.Mutable.with;
+import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetUnsafe;
+import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

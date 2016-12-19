@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.utils;
+package org.xdcrafts.flower.tools;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,10 +22,10 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.xdcrafts.flower.core.utils.MapApi.contains;
-import static org.xdcrafts.flower.core.utils.MapApi.getNullableString;
-import static org.xdcrafts.flower.core.utils.MapApi.getUnsafe;
-import static org.xdcrafts.flower.core.utils.MapDsl.Mutable.with;
+import static org.xdcrafts.flower.tools.MapApi.contains;
+import static org.xdcrafts.flower.tools.MapApi.getNullableString;
+import static org.xdcrafts.flower.tools.MapApi.getUnsafe;
+import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 
 /**
  * Simple MapDsl tests.
