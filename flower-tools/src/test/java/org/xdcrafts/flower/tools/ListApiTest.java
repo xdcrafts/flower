@@ -14,15 +14,15 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.utils;
+package org.xdcrafts.flower.tools;
 
 import org.junit.Test;
 
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.xdcrafts.flower.core.utils.ListApi.getNullable;
-import static org.xdcrafts.flower.core.utils.ListApi.getNullableString;
+import static org.xdcrafts.flower.tools.ListApi.getNullable;
+import static org.xdcrafts.flower.tools.ListApi.getNullableString;
 import static org.junit.Assert.assertEquals;
 
 /**

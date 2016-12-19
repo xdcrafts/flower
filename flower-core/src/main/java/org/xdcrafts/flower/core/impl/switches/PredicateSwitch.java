@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static org.xdcrafts.flower.core.utils.MapApi.get;
+import static org.xdcrafts.flower.tools.MapApi.get;
 
 /**
  * Implementation of Switch that selects Action based on predicates.

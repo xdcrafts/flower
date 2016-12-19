@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>flower-core</artifactId>
+    <artifactId>flower-tools</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>jar</packaging>
 
@@ -11,12 +11,4 @@
         <relativePath>..</relativePath>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.github.xdcrafts</groupId>
-            <artifactId>flower-tools</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 </project>

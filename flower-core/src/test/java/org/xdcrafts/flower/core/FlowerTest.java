@@ -28,10 +28,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.xdcrafts.flower.core.utils.MapApi.get;
-import static org.xdcrafts.flower.core.utils.MapApi.getUnsafe;
-import static org.xdcrafts.flower.core.utils.MapApi.Mutable.assoc;
-import static org.xdcrafts.flower.core.utils.MapDsl.Mutable.with;
+import static org.xdcrafts.flower.tools.MapApi.get;
+import static org.xdcrafts.flower.tools.MapApi.getUnsafe;
+import static org.xdcrafts.flower.tools.MapApi.Mutable.assoc;
+import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
