@@ -17,7 +17,8 @@
 package org.xdcrafts.flower.spring.impl.switches;
 
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.spring.AbstractBeanNameAwareFactoryBean;
+import org.xdcrafts.flower.core.Middleware;
+import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 import org.xdcrafts.flower.spring.Feature;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -32,9 +33,13 @@ import java.util.stream.Collectors;
  * @param <T>
  */
 public abstract class AbstractSwitchFactoryBean<T>
-    extends AbstractBeanNameAwareFactoryBean<T> implements ApplicationContextAware {
+    extends AbstractActionFactoryBean<T> implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
+
+    public AbstractSwitchFactoryBean(List<Middleware> middlewares) {
+        super(middlewares);
+    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

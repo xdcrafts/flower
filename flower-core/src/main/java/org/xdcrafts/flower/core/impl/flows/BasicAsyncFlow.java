@@ -18,6 +18,8 @@ package org.xdcrafts.flower.core.impl.flows;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Flow;
+import org.xdcrafts.flower.core.Middleware;
+import org.xdcrafts.flower.core.impl.ActionBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,16 +32,26 @@ import static org.xdcrafts.flower.tools.MapApi.Mutable.assoc;
 /**
  * Basic implementation of asynchronous flow.
  */
-public class BasicAsyncFlow implements Flow {
+public class BasicAsyncFlow extends ActionBase implements Flow {
 
     private final String name;
-    private final List<Action> flow;
+    private final List<Action> actions;
     private final ExecutorService executorService;
 
-    public BasicAsyncFlow(String name, List<Action> flow, ExecutorService executorService) {
+    public BasicAsyncFlow(
+        String name, List<Action> flow, ExecutorService executorService
+    ) {
+        this(name, flow, executorService, Collections.emptyList());
+    }
+
+    public BasicAsyncFlow(
+        String name, List<Action> actions, ExecutorService executorService, List<Middleware> middlewares
+    ) {
+        super(middlewares);
         this.name = name;
-        this.flow = Collections.unmodifiableList(flow);
+        this.actions = Collections.unmodifiableList(actions);
         this.executorService = executorService;
+        this.meta.put("name", name);
     }
 
     @Override
@@ -49,12 +61,12 @@ public class BasicAsyncFlow implements Flow {
 
     @Override
     public List<Action> actions() {
-        return flow;
+        return this.actions;
     }
 
     @Override
-    public Map apply(Map context) {
-        final CompletableFuture<Map> completion = flow.stream().reduce(
+    public Map act(Map context) {
+        final CompletableFuture<Map> completion = actions.stream().reduce(
             CompletableFuture.completedFuture(context),
             (future, action) -> future.thenApplyAsync(action, this.executorService),
             (left, right) -> right
@@ -66,7 +78,7 @@ public class BasicAsyncFlow implements Flow {
     public String toString() {
         return "BasicAsyncFlow{"
                 + "name='" + this.name + '\''
-                + ", actions=" + this.flow
+                + ", actions=" + this.actions
                 + ", executorService=" + this.executorService
                 + '}';
     }

@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core;
+package org.xdcrafts.flower.tools;
 
 import static java.lang.Character.isAlphabetic;
 import static java.lang.Character.isUpperCase;

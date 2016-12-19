@@ -17,20 +17,30 @@
 package org.xdcrafts.flower.spring.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
+import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.extensions.DefaultExtension;
-import org.xdcrafts.flower.spring.AbstractBeanNameAwareFactoryBean;
+import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Spring factory bean for default extension that uses bean name as it's name.
  */
-public class DefaultExtensionFactory extends AbstractBeanNameAwareFactoryBean<DefaultExtension> {
+public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultExtension> {
 
     private final Action action;
     private final Map configuration;
 
     public DefaultExtensionFactory(Action action, Map configuration) {
+        super(Collections.emptyList());
+        this.action = action;
+        this.configuration = configuration;
+    }
+
+    public DefaultExtensionFactory(Action action, Map configuration, List<Middleware> middlewares) {
+        super(middlewares);
         this.action = action;
         this.configuration = configuration;
     }
@@ -42,6 +52,6 @@ public class DefaultExtensionFactory extends AbstractBeanNameAwareFactoryBean<De
 
     @Override
     protected DefaultExtension createInstance() throws Exception {
-        return new DefaultExtension(getBeanName(), this.action, this.configuration);
+        return new DefaultExtension(getBeanName(), this.action, this.configuration, getMiddlewares());
     }
 }

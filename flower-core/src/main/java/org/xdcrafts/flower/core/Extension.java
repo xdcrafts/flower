@@ -46,9 +46,4 @@ public interface Extension extends Action {
      * Contains data specific for concrete router implementation.
      */
     Map configuration();
-
-    @Override
-    default Map apply(Map map) {
-        return action().apply(map);
-    }
 }

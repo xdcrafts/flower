@@ -18,9 +18,10 @@ package org.xdcrafts.flower.core.impl.switches;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.core.Switch;
+import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.extensions.KeywordExtension;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
 /**
  * Implementation of Switch that selects Action based on value of keyword in context.
  */
-public class KeywordSwitch implements Switch {
+public class KeywordSwitch extends SwitchBase {
 
     private final String name;
     private final String keyword;
@@ -38,6 +39,11 @@ public class KeywordSwitch implements Switch {
     private final Map<String, Action> actionsMapping;
 
     public KeywordSwitch(String name, String keyword, List<Extension> extensions) {
+        this(name, keyword, extensions, Collections.emptyList());
+    }
+
+    public KeywordSwitch(String name, String keyword, List<Extension> extensions, List<Middleware> middlewares) {
+        super(middlewares);
         this.name = name;
         this.keyword = keyword;
         this.extensions = extensions;
@@ -50,6 +56,7 @@ public class KeywordSwitch implements Switch {
                 ));
             actionsMapping.put(keywordValue, extension.action());
         }
+        this.meta.put("name", name);
     }
 
     @Override

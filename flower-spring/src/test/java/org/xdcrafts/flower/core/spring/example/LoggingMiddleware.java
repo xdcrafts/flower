@@ -31,11 +31,11 @@ public class LoggingMiddleware implements Middleware {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggingMiddleware.class);
 
     @Override
-    public Function<Map, Map> apply(Function<Map, Map> mapMapFunction) {
+    public Function<Map, Map> apply(Map<String, Object> actionMeta, Function<Map, Map> mapMapFunction) {
         return map -> {
-            LOGGER.info("{} in: {}", mapMapFunction, map);
+            LOGGER.info("Action {} input: {}", actionMeta, map);
             final Map out = mapMapFunction.apply(map);
-            LOGGER.info("{} out: {}", mapMapFunction, out);
+            LOGGER.info("Action {} output: {}", actionMeta, out);
             return out;
         };
     }

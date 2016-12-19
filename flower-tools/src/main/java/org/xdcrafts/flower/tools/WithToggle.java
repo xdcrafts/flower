@@ -14,14 +14,15 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core;
-
-import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+package org.xdcrafts.flower.tools;
 
 /**
- * Middleware interface.
+ * Interface for entities that have a toggle switch: enabled/disabled.
  */
-public interface Middleware extends BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>> {
+public interface WithToggle {
+
+    /**
+     * Returns toggle state.
+     */
+    boolean isEnabled();
 }

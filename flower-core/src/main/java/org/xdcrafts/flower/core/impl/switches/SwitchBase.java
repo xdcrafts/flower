@@ -14,21 +14,26 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core;
+package org.xdcrafts.flower.core.impl.switches;
 
-import java.util.function.Function;
+import org.xdcrafts.flower.core.Middleware;
+import org.xdcrafts.flower.core.Switch;
+import org.xdcrafts.flower.core.impl.ActionBase;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * AsFunction interface that can be represented as simple function.
- * @param <A>
- * @param <B>
+ * Abstract class as a base for any Switch implementation.
  */
-public interface AsFunction<A, B> extends Function<A, B> {
+public abstract class SwitchBase extends ActionBase implements Switch {
 
-    /**
-     * Casts itself to function.
-     */
-    default Function<A, B> asFunction() {
-        return this;
+    public SwitchBase(List<Middleware> middlewares) {
+        super(middlewares);
+    }
+
+    @Override
+    public Map act(Map ctx) {
+        return selectAction(ctx).apply(ctx);
     }
 }

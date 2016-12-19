@@ -16,10 +16,9 @@
 
 package org.xdcrafts.flower.spring.impl;
 
-import org.xdcrafts.flower.core.AsFunction;
 import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.DefaultAction;
-import org.xdcrafts.flower.spring.AbstractBeanNameAwareFactoryBean;
+import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -27,7 +26,7 @@ import org.springframework.context.ApplicationContextAware;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -36,33 +35,32 @@ import java.util.function.Function;
  * Spring factory bean for default action that uses bean name as action name.
  */
 public class DefaultActionFactory
-    extends AbstractBeanNameAwareFactoryBean<DefaultAction> implements ApplicationContextAware {
+    extends AbstractActionFactoryBean<DefaultAction> implements ApplicationContextAware {
 
     private static final String SPLITTER = "::";
 
     private final String subject;
     private final String method;
-    private final List<Middleware> middlewares;
     private ApplicationContext applicationContext;
 
     public DefaultActionFactory(String method) {
+        super(Collections.emptyList());
         final String[] subjectAndMethod = method.split(SPLITTER);
         if (subjectAndMethod.length != 2) {
             throw new IllegalArgumentException();
         }
         this.subject = subjectAndMethod[0];
         this.method = subjectAndMethod[1];
-        this.middlewares = new ArrayList<>();
     }
 
     public DefaultActionFactory(String method, List<Middleware> middlewares) {
+        super(middlewares);
         final String[] subjectAndMethod = method.split(SPLITTER);
         if (subjectAndMethod.length != 2) {
             throw new IllegalArgumentException();
         }
         this.subject = subjectAndMethod[0];
         this.method = subjectAndMethod[1];
-        this.middlewares = middlewares;
     }
 
     @Override
@@ -79,7 +77,8 @@ public class DefaultActionFactory
     protected DefaultAction createInstance() throws Exception {
         return new DefaultAction(
             getBeanName(),
-            buildActionFunction(this.subject, this.middlewares, this.method)
+            buildActionFunction(this.subject, this.method),
+            getMiddlewares()
         );
     }
 
@@ -107,13 +106,9 @@ public class DefaultActionFactory
     }
 
     private Function<Map, Map> buildActionFunction(
-        String classOrBeanName, List<Middleware> middlewareLists, String methodName
+        String classOrBeanName, String methodName
     ) {
         try {
-            final Function<Function<Map, Map>, Function<Map, Map>> middleware = middlewareLists
-                .stream()
-                .map(AsFunction::asFunction)
-                .reduce(Function.identity(), Function::andThen);
             final Object bean = this.applicationContext.containsBean(classOrBeanName)
                 ? this.applicationContext.getBean(classOrBeanName)
                 : null;
@@ -124,10 +119,10 @@ public class DefaultActionFactory
             final MethodHandle methodHandle = isVirtual
                 ? lookup.findVirtual(clazz, methodName, methodType)
                 : lookup.findStatic(clazz, methodName, methodType);
-            final Function<Map, Map> pureFunction = isVirtual
+            final Function<Map, Map> function = isVirtual
                 ? ctx -> safeVirtualInvoke(methodHandle, bean, ctx)
                 : ctx -> safeStaticInvoke(methodHandle, ctx);
-            return middleware.apply(pureFunction);
+            return function;
         } catch (Throwable throwable) {
             if (throwable instanceof RuntimeException) {
                 throw (RuntimeException) throwable;

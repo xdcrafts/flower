@@ -14,14 +14,21 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core;
+package org.xdcrafts.flower.tools;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
- * Middleware interface.
+ * With meta abstract base class.
  */
-public interface Middleware extends BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>> {
+public abstract class WithMetaBase implements WithMeta {
+
+    protected final Map<String, Object> meta = new HashMap<>();
+
+    @Override
+    public Map<String, Object> meta() {
+        return Collections.unmodifiableMap(this.meta);
+    }
 }

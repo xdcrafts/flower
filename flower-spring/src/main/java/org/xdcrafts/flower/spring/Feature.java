@@ -16,7 +16,7 @@
 
 package org.xdcrafts.flower.spring;
 
-import org.xdcrafts.flower.core.WithToggle;
+import org.xdcrafts.flower.tools.WithToggle;
 
 import java.util.Map;
 

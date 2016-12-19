@@ -17,9 +17,11 @@
 package org.xdcrafts.flower.core.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
-import org.xdcrafts.flower.core.Extension;
+import org.xdcrafts.flower.core.Middleware;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
@@ -27,7 +29,7 @@ import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 /**
  * Keyword-based implementation of selectAction.
  */
-public class KeywordExtension implements Extension {
+public class KeywordExtension extends ExtensionBase {
 
     /**
      * Class with configuration keys.
@@ -41,11 +43,17 @@ public class KeywordExtension implements Extension {
     private final Action action;
 
     public KeywordExtension(String name, String keywordValue, Action action) {
+        this(name, keywordValue, action, Collections.emptyList());
+    }
+
+    public KeywordExtension(String name, String keywordValue, Action action, List<Middleware> middlewares) {
+        super(middlewares);
         this.name = name;
         this.configuration = with(new HashMap())
             .assoc(ConfigurationKeys.KEYWORD_VALUE, keywordValue)
             .value();
         this.action = action;
+        this.meta.put("name", name);
     }
 
     @Override
@@ -67,8 +75,8 @@ public class KeywordExtension implements Extension {
     public String toString() {
         return "KeywordExtension{"
                 + "name='" + this.name + '\''
-                + ", action=" + action
-                + ", configuration=" + configuration
+                + ", action=" + this.action
+                + ", configuration=" + this.configuration
                 + '}';
     }
 }

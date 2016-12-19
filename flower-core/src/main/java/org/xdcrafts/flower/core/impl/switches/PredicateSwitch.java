@@ -18,10 +18,11 @@ package org.xdcrafts.flower.core.impl.switches;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.core.Switch;
+import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.extensions.PredicateExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ import static org.xdcrafts.flower.tools.MapApi.get;
  * Implementation of Switch that selects Action based on predicates.
  */
 @SuppressWarnings("unchecked")
-public class PredicateSwitch implements Switch {
+public class PredicateSwitch extends SwitchBase {
 
     private final String name;
     private final List<Extension> extensions;
@@ -41,6 +42,11 @@ public class PredicateSwitch implements Switch {
     private final Map<Predicate, Action> actionsMapping;
 
     public PredicateSwitch(String name, List<Extension> extensions) {
+        this(name, extensions, Collections.emptyList());
+    }
+
+    public PredicateSwitch(String name, List<Extension> extensions, List<Middleware> middlewares) {
+        super(middlewares);
         this.name = name;
         this.extensions = extensions;
         this.actionsMapping = new HashMap<>();
@@ -55,6 +61,7 @@ public class PredicateSwitch implements Switch {
             predicates.add(predicate);
             actionsMapping.put(predicate, extension.action());
         }
+        this.meta.put("name", name);
     }
 
     @Override

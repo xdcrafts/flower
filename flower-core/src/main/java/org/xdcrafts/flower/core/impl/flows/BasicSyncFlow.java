@@ -17,8 +17,10 @@
 package org.xdcrafts.flower.core.impl.flows;
 
 import org.xdcrafts.flower.core.Action;
-import org.xdcrafts.flower.core.AsFunction;
+import org.xdcrafts.flower.tools.AsFunction;
 import org.xdcrafts.flower.core.Flow;
+import org.xdcrafts.flower.core.Middleware;
+import org.xdcrafts.flower.core.impl.ActionBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,19 +30,25 @@ import java.util.function.Function;
 /**
  * Basic and straightforward implementation of Flow.
  */
-public class BasicSyncFlow implements Flow {
+public class BasicSyncFlow extends ActionBase implements Flow {
 
     private final String name;
-    private final List<Action> flow;
+    private final List<Action> actions;
     private final Function<Map, Map> flowFunction;
 
-    public BasicSyncFlow(String name, List<Action> flow) {
+    public BasicSyncFlow(String name, List<Action> actions) {
+        this(name, actions, Collections.emptyList());
+    }
+
+    public BasicSyncFlow(String name, List<Action> actions, List<Middleware> middlewares) {
+        super(middlewares);
         this.name = name;
-        this.flow = Collections.unmodifiableList(flow);
-        this.flowFunction = flow
+        this.actions = Collections.unmodifiableList(actions);
+        this.flowFunction = actions
             .stream()
             .map(AsFunction::asFunction)
             .reduce(Function.identity(), Function::andThen);
+        this.meta.put("name", name);
     }
 
     @Override
@@ -50,11 +58,11 @@ public class BasicSyncFlow implements Flow {
 
     @Override
     public List<Action> actions() {
-        return flow;
+        return this.actions;
     }
 
     @Override
-    public Map apply(Map context) {
+    public Map act(Map context) {
         return this.flowFunction.apply(context);
     }
 
@@ -62,7 +70,7 @@ public class BasicSyncFlow implements Flow {
     public String toString() {
         return "BasicSyncFlow{"
                 + "name='" + this.name + '\''
-                + ", actions=" + this.flow
+                + ", actions=" + this.actions
                 + '}';
     }
 }

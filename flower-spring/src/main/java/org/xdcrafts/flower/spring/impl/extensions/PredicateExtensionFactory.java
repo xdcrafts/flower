@@ -17,21 +17,31 @@
 package org.xdcrafts.flower.spring.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
+import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.extensions.PredicateExtension;
-import org.xdcrafts.flower.spring.AbstractBeanNameAwareFactoryBean;
+import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
 /**
  * Spring factory bean for predicate extension that uses bean name as it's name.
  */
-public class PredicateExtensionFactory extends AbstractBeanNameAwareFactoryBean<PredicateExtension> {
+public class PredicateExtensionFactory extends AbstractActionFactoryBean<PredicateExtension> {
 
     private final Predicate<Map> predicate;
     private final Action action;
 
     public PredicateExtensionFactory(Predicate<Map> predicate, Action action) {
+        super(Collections.emptyList());
+        this.predicate = predicate;
+        this.action = action;
+    }
+
+    public PredicateExtensionFactory(Predicate<Map> predicate, Action action, List<Middleware> middlewares) {
+        super(middlewares);
         this.predicate = predicate;
         this.action = action;
     }
@@ -43,6 +53,6 @@ public class PredicateExtensionFactory extends AbstractBeanNameAwareFactoryBean<
 
     @Override
     protected PredicateExtension createInstance() throws Exception {
-        return new PredicateExtension(getBeanName(), this.action, this.predicate);
+        return new PredicateExtension(getBeanName(), this.action, this.predicate, getMiddlewares());
     }
 }

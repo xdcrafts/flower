@@ -17,9 +17,11 @@
 package org.xdcrafts.flower.core.impl.extensions;
 
 import org.xdcrafts.flower.core.Action;
-import org.xdcrafts.flower.core.Extension;
+import org.xdcrafts.flower.core.Middleware;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -28,7 +30,7 @@ import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 /**
  * Predicate-based implementation of Extension.
  */
-public class PredicateExtension implements Extension {
+public class PredicateExtension extends ExtensionBase {
 
     /**
      * Class with configuration keys.
@@ -42,11 +44,17 @@ public class PredicateExtension implements Extension {
     private final Map configuration;
 
     public PredicateExtension(String name, Action action, Predicate<Map> predicate) {
+        this(name, action, predicate, Collections.emptyList());
+    }
+
+    public PredicateExtension(String name, Action action, Predicate<Map> predicate, List<Middleware> middlewares) {
+        super(middlewares);
         this.name = name;
         this.action = action;
         this.configuration = with(new HashMap())
             .assoc(ConfigurationKeys.PREDICATE, predicate)
             .value();
+        this.meta.put("name", name);
     }
 
     @Override
