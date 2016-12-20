@@ -39,7 +39,7 @@ import static org.junit.Assert.assertTrue;
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(locations = "/groovy/application-context.groovy")
+@SpringApplicationConfiguration(locations = "/xml/application-context.xml")
 public class SpringIntegrationTest {
 
     @Autowired

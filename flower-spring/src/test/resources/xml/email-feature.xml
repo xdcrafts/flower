@@ -58,7 +58,7 @@
     <!--                                  Features start                                                         -->
 
     <bean id="emailFeature" class="org.xdcrafts.flower.spring.impl.DefaultFeature">
-        <constructor-arg name="enabled" value="true"/>
+        <constructor-arg name="enabled" value="${feature.email.enabled}"/>
         <constructor-arg name="extensions">
             <map>
                 <entry key="emailExtension" value="switcher"/>
