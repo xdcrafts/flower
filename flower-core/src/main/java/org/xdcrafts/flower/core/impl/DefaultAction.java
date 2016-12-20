@@ -26,7 +26,7 @@ import java.util.function.Function;
 /**
  * Basic implementation of action.
  */
-public class DefaultAction extends ActionBase {
+public class DefaultAction extends MiddlewaredActionBase {
 
     private final String name;
     private final Function<Map, Map> actionBody;
@@ -40,6 +40,7 @@ public class DefaultAction extends ActionBase {
         this.actionBody = body;
         this.name = name;
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

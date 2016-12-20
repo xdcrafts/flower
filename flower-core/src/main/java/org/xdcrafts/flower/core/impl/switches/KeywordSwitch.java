@@ -31,7 +31,7 @@ import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
 /**
  * Implementation of Switch that selects Action based on value of keyword in context.
  */
-public class KeywordSwitch extends SwitchBase {
+public class KeywordSwitch extends MiddlewaredSwitchBase {
 
     private final String name;
     private final String keyword;
@@ -57,6 +57,7 @@ public class KeywordSwitch extends SwitchBase {
             actionsMapping.put(keywordValue, extension.action());
         }
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

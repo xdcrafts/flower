@@ -27,11 +27,11 @@ import java.util.function.Function;
 /**
  * Abstract class as a base for any Action implementation.
  */
-public abstract class ActionBase extends WithMetaBase implements Action {
+public abstract class MiddlewaredActionBase extends WithMetaBase implements Action {
 
     private final Function<Map, Map> applyBody;
 
-    public ActionBase(List<Middleware> middlewares) {
+    public MiddlewaredActionBase(List<Middleware> middlewares) {
         if (middlewares == null || middlewares.isEmpty()) {
             this.applyBody = this::act;
         } else {

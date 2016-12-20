@@ -34,7 +34,7 @@ import static org.xdcrafts.flower.tools.MapApi.get;
  * Implementation of Switch that selects Action based on predicates.
  */
 @SuppressWarnings("unchecked")
-public class PredicateSwitch extends SwitchBase {
+public class PredicateSwitch extends MiddlewaredSwitchBase {
 
     private final String name;
     private final List<Extension> extensions;
@@ -62,6 +62,7 @@ public class PredicateSwitch extends SwitchBase {
             actionsMapping.put(predicate, extension.action());
         }
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

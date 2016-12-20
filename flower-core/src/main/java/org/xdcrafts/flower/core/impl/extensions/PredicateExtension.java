@@ -30,7 +30,7 @@ import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 /**
  * Predicate-based implementation of Extension.
  */
-public class PredicateExtension extends ExtensionBase {
+public class PredicateExtension extends MiddlewaredExtensionBase {
 
     /**
      * Class with configuration keys.
@@ -55,6 +55,7 @@ public class PredicateExtension extends ExtensionBase {
             .assoc(ConfigurationKeys.PREDICATE, predicate)
             .value();
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

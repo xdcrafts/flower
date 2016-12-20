@@ -29,7 +29,7 @@ import static org.xdcrafts.flower.tools.MapDsl.Mutable.with;
 /**
  * Keyword-based implementation of selectAction.
  */
-public class KeywordExtension extends ExtensionBase {
+public class KeywordExtension extends MiddlewaredExtensionBase {
 
     /**
      * Class with configuration keys.
@@ -54,6 +54,7 @@ public class KeywordExtension extends ExtensionBase {
             .value();
         this.action = action;
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

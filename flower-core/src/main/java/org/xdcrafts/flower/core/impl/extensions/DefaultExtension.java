@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Default implementation of Extension.
  */
-public class DefaultExtension extends ExtensionBase {
+public class DefaultExtension extends MiddlewaredExtensionBase {
 
     private final String name;
     private final Action action;
@@ -42,6 +42,7 @@ public class DefaultExtension extends ExtensionBase {
         this.action = action;
         this.configuration = configuration;
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

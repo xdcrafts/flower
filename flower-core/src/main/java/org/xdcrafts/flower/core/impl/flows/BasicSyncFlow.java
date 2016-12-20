@@ -20,7 +20,7 @@ import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.tools.AsFunction;
 import org.xdcrafts.flower.core.Flow;
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.core.impl.ActionBase;
+import org.xdcrafts.flower.core.impl.MiddlewaredActionBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.function.Function;
 /**
  * Basic and straightforward implementation of Flow.
  */
-public class BasicSyncFlow extends ActionBase implements Flow {
+public class BasicSyncFlow extends MiddlewaredActionBase implements Flow {
 
     private final String name;
     private final List<Action> actions;
@@ -49,6 +49,7 @@ public class BasicSyncFlow extends ActionBase implements Flow {
             .map(AsFunction::asFunction)
             .reduce(Function.identity(), Function::andThen);
         this.meta.put("name", name);
+        this.meta.put("class", getClass().getName());
     }
 
     @Override

@@ -14,26 +14,26 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.impl.switches;
+package org.xdcrafts.flower.core.impl.extensions;
 
+import org.xdcrafts.flower.core.Extension;
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.core.Switch;
-import org.xdcrafts.flower.core.impl.ActionBase;
+import org.xdcrafts.flower.core.impl.MiddlewaredActionBase;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Abstract class as a base for any Switch implementation.
+ * Abstract class as a base for any Extension implementation.
  */
-public abstract class SwitchBase extends ActionBase implements Switch {
+public abstract class MiddlewaredExtensionBase extends MiddlewaredActionBase implements Extension {
 
-    public SwitchBase(List<Middleware> middlewares) {
+    public MiddlewaredExtensionBase(List<Middleware> middlewares) {
         super(middlewares);
     }
 
     @Override
-    public Map act(Map ctx) {
-        return selectAction(ctx).apply(ctx);
+    public Map act(Map map) {
+        return action().apply(map);
     }
 }
