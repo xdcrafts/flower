@@ -19,15 +19,15 @@
     <!--                                  Actions start                                                          -->
 
     <bean id="emailRequestValidatorAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="emailRequestValidator::validate"/>
+        <constructor-arg name="method" value="emailRequestValidator::validate"/>
     </bean>
 
     <bean id="emailAuthorizerAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="emailAuthorizer::authorize"/>
+        <constructor-arg name="method" value="emailAuthorizer::authorize"/>
     </bean>
 
     <bean id="emailSenderAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="emailSender::send"/>
+        <constructor-arg name="method" value="emailSender::send"/>
     </bean>
 
     <!--                                  Actions end                                                            -->
@@ -35,7 +35,7 @@
     <!--                                  Flows start                                                            -->
 
     <bean id="emailFlow" class="org.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
-        <constructor-arg>
+        <constructor-arg name="flow">
             <list>
                 <ref bean="emailRequestValidatorAction"/>
                 <ref bean="emailAuthorizerAction"/>
@@ -49,8 +49,8 @@
     <!--                                  Extensions start                                                       -->
 
     <bean id="emailExtension" class="org.xdcrafts.flower.spring.impl.extensions.KeywordExtensionFactory">
-        <constructor-arg value="email"/>
-        <constructor-arg ref="emailFlow"/>
+        <constructor-arg name="keywordValue" value="email"/>
+        <constructor-arg name="action" ref="emailFlow"/>
     </bean>
 
     <!--                                  Extensions end                                                         -->
@@ -58,8 +58,8 @@
     <!--                                  Features start                                                         -->
 
     <bean id="emailFeature" class="org.xdcrafts.flower.spring.impl.DefaultFeature">
-        <constructor-arg value="true"/>
-        <constructor-arg>
+        <constructor-arg name="enabled" value="true"/>
+        <constructor-arg name="extensions">
             <map>
                 <entry key="emailExtension" value="switcher"/>
             </map>

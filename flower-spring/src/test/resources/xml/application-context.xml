@@ -12,14 +12,14 @@
     <!--                                Simple beans start                                                       -->
 
     <bean id="authenticator" class="org.xdcrafts.flower.core.spring.example.Authenticator">
-        <constructor-arg>
+        <constructor-arg name="users">
             <map>
                 <entry key="secret-admin">
                     <bean class="org.xdcrafts.flower.core.spring.example.User">
-                        <constructor-arg value="admin"/>
-                        <constructor-arg value="admin@example.com"/>
-                        <constructor-arg value="adminpwd"/>
-                        <constructor-arg>
+                        <constructor-arg name="name" value="admin"/>
+                        <constructor-arg name="email" value="admin@example.com"/>
+                        <constructor-arg name="password" value="adminpwd"/>
+                        <constructor-arg name="roles">
                             <list>
                                 <value>sms</value>
                                 <value>email</value>
@@ -29,10 +29,10 @@
                 </entry>
                 <entry key="sms-only-user">
                     <bean class="org.xdcrafts.flower.core.spring.example.User">
-                        <constructor-arg value="sms-only-user"/>
-                        <constructor-arg value="sms-only-user@example.com"/>
-                        <constructor-arg value="smsonlypwd"/>
-                        <constructor-arg>
+                        <constructor-arg name="name" value="sms-only-user"/>
+                        <constructor-arg name="email" value="sms-only-user@example.com"/>
+                        <constructor-arg name="password" value="smsonlypwd"/>
+                        <constructor-arg name="roles">
                             <list>
                                 <value>sms</value>
                             </list>
@@ -41,10 +41,10 @@
                 </entry>
                 <entry key="email-only-user">
                     <bean class="org.xdcrafts.flower.core.spring.example.User">
-                        <constructor-arg value="email-only-user"/>
-                        <constructor-arg value="email-only-user@example.com"/>
-                        <constructor-arg value="emailonlypwd"/>
-                        <constructor-arg>
+                        <constructor-arg name="name" value="email-only-user"/>
+                        <constructor-arg name="email" value="email-only-user@example.com"/>
+                        <constructor-arg name="password" value="emailonlypwd"/>
+                        <constructor-arg name="roles">
                             <list>
                                 <value>email</value>
                             </list>
@@ -68,8 +68,8 @@
     <!--                                  Actions start                                                          -->
 
     <bean id="authenticatorAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="authenticator::authenticate"/>
-        <constructor-arg>
+        <constructor-arg name="method" value="authenticator::authenticate"/>
+        <constructor-arg name="middlewares">
             <list>
                 <ref bean="loggingMiddleware"/>
             </list>
@@ -77,11 +77,11 @@
     </bean>
 
     <bean id="switcher" class="org.xdcrafts.flower.spring.impl.switches.KeywordSwitchFactory">
-        <constructor-arg value="request.type"/>
+        <constructor-arg name="keyword" value="request.type"/>
     </bean>
 
     <bean id="receiverAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="receiver::receive"/>
+        <constructor-arg name="method" value="receiver::receive"/>
     </bean>
 
     <!--                                  Actions end                                                            -->
@@ -89,14 +89,14 @@
     <!--                                  Flows start                                                            -->
 
     <bean id="mainFlow" class="org.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
-        <constructor-arg>
+        <constructor-arg name="flow">
             <list>
                 <ref bean="authenticatorAction"/>
                 <ref bean="switcher"/>
                 <ref bean="receiverAction"/>
             </list>
         </constructor-arg>
-        <constructor-arg>
+        <constructor-arg name="middlewares">
             <list>
                 <ref bean="loggingMiddleware"/>
             </list>

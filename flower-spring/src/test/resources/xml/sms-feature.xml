@@ -19,15 +19,15 @@
     <!--                                  Actions start                                                          -->
 
     <bean id="smsRequestValidatorAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="smsRequestValidator::validate"/>
+        <constructor-arg name="method" value="smsRequestValidator::validate"/>
     </bean>
 
     <bean id="smsAuthorizerAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="smsAuthorizer::authorize"/>
+        <constructor-arg name="method" value="smsAuthorizer::authorize"/>
     </bean>
 
     <bean id="smsSenderAction" class="org.xdcrafts.flower.spring.impl.DefaultActionFactory">
-        <constructor-arg value="smsSender::send"/>
+        <constructor-arg name="method" value="smsSender::send"/>
     </bean>
 
     <!--                                  Actions end                                                            -->
@@ -35,7 +35,7 @@
     <!--                                  Flows start                                                            -->
 
     <bean id="smsFlow" class="org.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
-        <constructor-arg>
+        <constructor-arg name="flow">
             <list>
                 <ref bean="smsRequestValidatorAction"/>
                 <ref bean="smsAuthorizerAction"/>
@@ -49,8 +49,8 @@
     <!--                                  Extensions start                                                       -->
 
     <bean id="smsExtension" class="org.xdcrafts.flower.spring.impl.extensions.KeywordExtensionFactory">
-        <constructor-arg value="sms"/>
-        <constructor-arg ref="smsFlow"/>
+        <constructor-arg name="keywordValue" value="sms"/>
+        <constructor-arg name="action" ref="smsFlow"/>
     </bean>
 
     <!--                                  Extensions end                                                         -->
@@ -58,8 +58,8 @@
     <!--                                  Features start                                                         -->
 
     <bean id="smsFeature" class="org.xdcrafts.flower.spring.impl.DefaultFeature">
-        <constructor-arg value="true"/>
-        <constructor-arg>
+        <constructor-arg name="enabled" value="true"/>
+        <constructor-arg name="extensions">
             <map>
                 <entry key="smsExtension" value="switcher"/>
             </map>
