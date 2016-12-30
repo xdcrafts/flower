@@ -16,34 +16,77 @@
 
 package org.xdcrafts.flower.spring.impl;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.xdcrafts.flower.core.Middleware;
+
+import java.util.AbstractMap;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Definition of action to middleware mapping.
  */
-public class MiddlewareDefinition {
+public class MiddlewareDefinition implements ApplicationContextAware {
+
+    private static final String SPLITTER_REGEX = ",";
+
+    private static List<String> split(String string) {
+        return Arrays.stream(string.split(SPLITTER_REGEX)).map(String::trim).collect(Collectors.toList());
+    }
 
     private final String namespace;
-    private final Map<String, String> injections;
+    private final Map<String, String> rawDefinition;
+    private Map<String, List<Middleware>> definition;
 
-    public MiddlewareDefinition(String namespace, Map<String, String> injections) {
+    public MiddlewareDefinition(Map<String, String> definition) {
+        this(null, definition);
+    }
+
+    public MiddlewareDefinition(String namespace, Map<String, String> definition) {
+        if (definition == null) {
+            throw new IllegalArgumentException("'definition' can not be null.");
+        }
+        this.rawDefinition = definition;
         this.namespace = namespace;
-        this.injections = injections;
     }
 
-    public String getNamespace() {
-        return namespace;
+    public Map<String, List<Middleware>> getDefinition() {
+        return definition;
     }
 
-    public Map<String, String> getInjections() {
-        return injections;
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        final Map<String, List<Middleware>> groupedInjections = this.rawDefinition
+            .entrySet()
+            .stream()
+            .flatMap(e -> {
+                final List<Middleware> middleware = split(e.getValue())
+                    .stream()
+                    .map(name -> applicationContext.getBean(name, Middleware.class))
+                    .collect(Collectors.toList());
+                return split(e.getKey())
+                    .stream()
+                    .map(name -> new AbstractMap.SimpleEntry<>(name, middleware));
+            }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.definition = namespace == null || namespace.isEmpty()
+            ? groupedInjections
+            : groupedInjections
+            .entrySet()
+            .stream()
+            .map(e -> new AbstractMap.SimpleEntry<>(namespace + "." + e.getKey(), e.getValue()))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
     public String toString() {
         return "MiddlewareDefinition{"
                 + "namespace='" + namespace + '\''
-                + ", injections=" + injections
+                + ", rawDefinition=" + rawDefinition
+                + ", definition=" + definition
                 + '}';
     }
 }

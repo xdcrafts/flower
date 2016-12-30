@@ -22,9 +22,8 @@
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
-    <import resource="classpath*:*-feature.xml"/>
-
-    <bean class="org.xdcrafts.flower.spring.impl.MiddlewareResolver"/>
+    <import resource="classpath*:middleware.xml"/>
+    <import resource="classpath*:features/*-feature.xml"/>
 
     <!--                                Simple beans start                                                       -->
 
@@ -78,13 +77,12 @@
 
     <!--                                  Middleware start                                                       -->
 
-    <bean id="loggingMiddleware" class="org.xdcrafts.flower.core.spring.example.LoggingMiddleware"/>
+
 
     <bean class="org.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <constructor-arg name="namespace" value=":root"/>
-        <constructor-arg name="injections">
+        <constructor-arg name="definition">
             <map>
-                <entry key=":this, email, sms" value="rootMiddleware, :super"/>
+                <entry key="switcher" value="loggingMiddleware"/>
             </map>
         </constructor-arg>
     </bean>

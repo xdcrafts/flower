@@ -30,6 +30,6 @@ public class PredicateSwitchFactory extends AbstractSwitchFactoryBean<PredicateS
 
     @Override
     protected PredicateSwitch createInstance() throws Exception {
-        return new PredicateSwitch(getBeanName(), fetchExtensions(getBeanName()), getMiddlewares());
+        return new PredicateSwitch(getBeanName(), fetchExtensions(getBeanName()), getMiddleware(getBeanName()));
     }
 }

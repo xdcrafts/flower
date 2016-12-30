@@ -42,6 +42,6 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
 
     @Override
     protected DefaultExtension createInstance() throws Exception {
-        return new DefaultExtension(getBeanName(), this.action, this.configuration, getMiddlewares());
+        return new DefaultExtension(getBeanName(), this.action, this.configuration, getMiddleware(getBeanName()));
     }
 }

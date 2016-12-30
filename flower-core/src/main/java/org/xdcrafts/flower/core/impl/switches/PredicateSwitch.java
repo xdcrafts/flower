@@ -33,7 +33,14 @@ import static org.xdcrafts.flower.tools.MapApi.get;
  * Implementation of Switch that selects Action based on predicates.
  */
 @SuppressWarnings("unchecked")
-public class PredicateSwitch extends MiddlewaredSwitchBase {
+public class PredicateSwitch extends WithMiddlewareSwitchBase {
+
+    /**
+     * Class with configuration keys.
+     */
+    public static final class ConfigurationKeys {
+        public static final String PREDICATE = "predicate";
+    }
 
     /**
      * Class with configuration keys.
@@ -51,8 +58,8 @@ public class PredicateSwitch extends MiddlewaredSwitchBase {
         this(name, extensions, Collections.emptyList());
     }
 
-    public PredicateSwitch(String name, List<Extension> extensions, List<Middleware> middlewares) {
-        super(middlewares);
+    public PredicateSwitch(String name, List<Extension> extensions, List<Middleware> middleware) {
+        super(middleware);
         this.name = name;
         this.extensions = extensions;
         this.actionsMapping = new HashMap<>();

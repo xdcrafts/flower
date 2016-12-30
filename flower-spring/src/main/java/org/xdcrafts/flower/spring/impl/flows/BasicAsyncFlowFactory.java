@@ -43,6 +43,6 @@ public class BasicAsyncFlowFactory extends AbstractActionFactoryBean<BasicAsyncF
 
     @Override
     protected BasicAsyncFlow createInstance() throws Exception {
-        return new BasicAsyncFlow(getBeanName(), this.actions, this.executorService, getMiddlewares());
+        return new BasicAsyncFlow(getBeanName(), this.actions, this.executorService, getMiddleware(getBeanName()));
     }
 }

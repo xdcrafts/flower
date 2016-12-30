@@ -30,7 +30,14 @@ import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
 /**
  * Implementation of Switch that selects Action based on value of keyword in context.
  */
-public class KeywordSwitch extends MiddlewaredSwitchBase {
+public class KeywordSwitch extends WithMiddlewareSwitchBase {
+
+    /**
+     * Class with configuration keys.
+     */
+    public static final class ConfigurationKeys {
+        public static final String KEYWORD_VALUE = "keyword-value";
+    }
 
     /**
      * Class with configuration keys.
@@ -48,8 +55,8 @@ public class KeywordSwitch extends MiddlewaredSwitchBase {
         this(name, keyword, extensions, Collections.emptyList());
     }
 
-    public KeywordSwitch(String name, String keyword, List<Extension> extensions, List<Middleware> middlewares) {
-        super(middlewares);
+    public KeywordSwitch(String name, String keyword, List<Extension> extensions, List<Middleware> middleware) {
+        super(middleware);
         this.name = name;
         this.keyword = keyword;
         this.extensions = extensions;

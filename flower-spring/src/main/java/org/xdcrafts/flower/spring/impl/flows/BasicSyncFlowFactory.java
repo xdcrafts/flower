@@ -40,6 +40,6 @@ public class BasicSyncFlowFactory extends AbstractActionFactoryBean<BasicSyncFlo
 
     @Override
     protected BasicSyncFlow createInstance() throws Exception {
-        return new BasicSyncFlow(getBeanName(), this.actions, getMiddlewares());
+        return new BasicSyncFlow(getBeanName(), this.actions, getMiddleware(getBeanName()));
     }
 }

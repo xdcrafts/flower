@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2016 Vadim Dubs https://github.com/xdcrafts
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+  ~ either express or implied. See the License for the specific
+  ~ language governing permissions and limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
+       profile="email-feature">
+
+    <!--                                Simple beans start                                                       -->
+
+    <bean id="email.RequestValidator" class="org.xdcrafts.flower.core.spring.example.email.EmailRequestValidator"/>
+
+    <bean id="email.Authorizer" class="org.xdcrafts.flower.core.spring.example.email.EmailAuthorizer"/>
+
+    <bean id="email.Sender" class="org.xdcrafts.flower.core.spring.example.email.EmailSender"/>
+
+    <!--                                  Simple beans end                                                       -->
+
+    <bean class="org.xdcrafts.flower.spring.impl.MiddlewareDefinition">
+        <constructor-arg name="namespace" value="email"/>
+        <constructor-arg name="definition">
+            <map>
+                <entry key="Validate, Authorize, Send" value="loggingMiddleware"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!--                                  Actions start                                                          -->
+
+    <bean class="org.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
+        <constructor-arg name="namespace" value="email"/>
+        <constructor-arg name="actions">
+            <map>
+                <entry key="Validate" value="email.RequestValidator::validate"/>
+                <entry key="Authorize" value="email.Authorizer::authorize"/>
+                <entry key="Send" value="email.Sender::send"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!--                                  Actions end                                                            -->
+
+    <!--                                  Flows start                                                            -->
+
+    <bean id="email.Flow" class="org.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
+        <constructor-arg name="actions">
+            <list>
+                <ref bean="email.Validate"/>
+                <ref bean="email.Authorize"/>
+                <ref bean="email.Send"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!--                                  Flows end                                                              -->
+
+    <!--                                  Extensions start                                                       -->
+
+    <bean id="email.Extension" class="org.xdcrafts.flower.spring.impl.DefaultExtensionFactory">
+        <constructor-arg name="action" ref="email.Flow"/>
+        <constructor-arg name="configuration">
+            <map>
+                <entry key="keyword-value" value="email"/>
+                <entry key="switch" value="switcher"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!--                                  Extensions end                                                         -->
+
+</beans>
+

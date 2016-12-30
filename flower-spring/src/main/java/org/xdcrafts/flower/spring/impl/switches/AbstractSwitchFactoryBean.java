@@ -18,9 +18,6 @@ package org.xdcrafts.flower.spring.impl.switches;
 
 import org.xdcrafts.flower.core.Extension;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,27 +26,15 @@ import java.util.stream.Collectors;
  * Abstract class for switches factory beans.
  * @param <T>
  */
-public abstract class AbstractSwitchFactoryBean<T>
-    extends AbstractActionFactoryBean<T> implements ApplicationContextAware {
+public abstract class AbstractSwitchFactoryBean<T> extends AbstractActionFactoryBean<T> {
 
     private static final String SWITCH = "switch";
 
-    private ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return this.applicationContext;
-    }
-
     /**
-     * Scan application context and find all extensions within bundles that should be attached to router with full name.
+     * Scan application context and find all extensions within bundles that should be attached to switch with name.
      */
     protected List<Extension> fetchExtensions(String name) {
-        return this.applicationContext
+        return getApplicationContext()
             .getBeansOfType(Extension.class, true, false)
             .values()
             .stream()

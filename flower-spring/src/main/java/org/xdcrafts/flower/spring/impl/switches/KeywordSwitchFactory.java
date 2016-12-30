@@ -36,6 +36,8 @@ public class KeywordSwitchFactory extends AbstractSwitchFactoryBean<KeywordSwitc
 
     @Override
     protected KeywordSwitch createInstance() throws Exception {
-        return new KeywordSwitch(getBeanName(), this.keyword, fetchExtensions(getBeanName()), getMiddlewares());
+        return new KeywordSwitch(
+            getBeanName(), this.keyword, fetchExtensions(getBeanName()), getMiddleware(getBeanName())
+        );
     }
 }

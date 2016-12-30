@@ -27,19 +27,19 @@ import java.util.function.Function;
 /**
  * Abstract class as a base for any Action implementation.
  */
-public abstract class MiddlewaredActionBase extends WithMetaBase implements Action {
+public abstract class WithMiddlewareActionBase extends WithMetaBase implements Action {
 
     private final Function<Map, Map> applyBody;
 
-    public MiddlewaredActionBase(List<Middleware> middlewares) {
-        if (middlewares == null || middlewares.isEmpty()) {
+    public WithMiddlewareActionBase(List<Middleware> middleware) {
+        if (middleware == null || middleware.isEmpty()) {
             this.applyBody = this::act;
         } else {
-            final Function<Function<Map, Map>, Function<Map, Map>> middleware = middlewares
+            final Function<Function<Map, Map>, Function<Map, Map>> reduced = middleware
                 .stream()
                 .map(mw -> (Function<Function<Map, Map>, Function<Map, Map>>) f -> mw.apply(meta(), f))
                 .reduce(Function.identity(), Function::andThen);
-            this.applyBody = middleware.apply(this::act);
+            this.applyBody = reduced.apply(this::act);
         }
     }
 
@@ -51,7 +51,7 @@ public abstract class MiddlewaredActionBase extends WithMetaBase implements Acti
     /**
      * Implement your normal 'apply' logic here.
      * This method will be wrapped with list of
-     * middlewares and transformed into 'apply' function.
+     * middleware and transformed into 'apply' function.
      */
     public abstract Map act(Map map);
 }

@@ -16,15 +16,17 @@
 
 package org.xdcrafts.flower.spring;
 
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.xdcrafts.flower.core.Middleware;
+import org.xdcrafts.flower.spring.impl.MiddlewareDefinition;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Abstract bean factory that aware of bean name.
@@ -38,11 +40,6 @@ public abstract class AbstractActionFactoryBean<T>
     private String beanName;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
     public void setBeanName(String name) {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name can not be null or empty string!");
@@ -54,7 +51,26 @@ public abstract class AbstractActionFactoryBean<T>
         return this.beanName;
     }
 
-    public List<Middleware> getMiddlewares() {
-        return Collections.emptyList();
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    /**
+     * Resolves middleware assigned to action by it's name.
+     */
+    protected List<Middleware> getMiddleware(String name) {
+        final List<Middleware> middleware = this.applicationContext
+            .getBeansOfType(MiddlewareDefinition.class, true, false)
+            .values()
+            .stream()
+            .flatMap(d -> d.getDefinition().entrySet().stream())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+            .get(name);
+        return middleware == null ? Collections.emptyList() : middleware;
     }
 }

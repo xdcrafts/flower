@@ -14,19 +14,26 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.spring;
+package org.xdcrafts.flower.core.impl.extensions;
 
-import org.xdcrafts.flower.tools.WithToggle;
+import org.xdcrafts.flower.core.Extension;
+import org.xdcrafts.flower.core.Middleware;
+import org.xdcrafts.flower.core.impl.WithMiddlewareActionBase;
 
+import java.util.List;
 import java.util.Map;
 
 /**
- * Packaged mapping of extensions to routers.
+ * Abstract class as a base for any Extension implementation.
  */
-public interface Feature extends WithToggle {
+public abstract class WithMiddlewareExtensionBase extends WithMiddlewareActionBase implements Extension {
 
-    /**
-     * Returns mapping of bundle's extensions to switch names.
-     */
-    Map<String, String> extensions();
+    public WithMiddlewareExtensionBase(List<Middleware> middleware) {
+        super(middleware);
+    }
+
+    @Override
+    public Map act(Map map) {
+        return action().apply(map);
+    }
 }
