@@ -16,7 +16,6 @@
 
 package org.xdcrafts.flower.spring.impl;
 
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.DefaultAction;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 import org.springframework.beans.BeansException;
@@ -26,8 +25,6 @@ import org.springframework.context.ApplicationContextAware;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -44,17 +41,6 @@ public class DefaultActionFactory
     private ApplicationContext applicationContext;
 
     public DefaultActionFactory(String method) {
-        super(Collections.emptyList());
-        final String[] subjectAndMethod = method.split(SPLITTER);
-        if (subjectAndMethod.length != 2) {
-            throw new IllegalArgumentException();
-        }
-        this.subject = subjectAndMethod[0];
-        this.method = subjectAndMethod[1];
-    }
-
-    public DefaultActionFactory(String method, List<Middleware> middlewares) {
-        super(middlewares);
         final String[] subjectAndMethod = method.split(SPLITTER);
         if (subjectAndMethod.length != 2) {
             throw new IllegalArgumentException();
@@ -119,10 +105,9 @@ public class DefaultActionFactory
             final MethodHandle methodHandle = isVirtual
                 ? lookup.findVirtual(clazz, methodName, methodType)
                 : lookup.findStatic(clazz, methodName, methodType);
-            final Function<Map, Map> function = isVirtual
+            return isVirtual
                 ? ctx -> safeVirtualInvoke(methodHandle, bean, ctx)
                 : ctx -> safeStaticInvoke(methodHandle, ctx);
-            return function;
         } catch (Throwable throwable) {
             if (throwable instanceof RuntimeException) {
                 throw (RuntimeException) throwable;

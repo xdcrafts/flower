@@ -16,6 +16,7 @@
 
 package org.xdcrafts.flower.core.spring;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.xdcrafts.flower.core.Flow;
 import org.xdcrafts.flower.core.spring.example.email.EmailSender;
 import org.xdcrafts.flower.core.spring.example.sms.SmsSender;
@@ -39,7 +40,8 @@ import static org.junit.Assert.assertTrue;
  */
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(locations = "/xml/application-context.xml")
+@ActiveProfiles({"email-feature", "sms-feature"})
+@SpringApplicationConfiguration(locations = "/application-context.xml")
 public class SpringIntegrationTest {
 
     @Autowired

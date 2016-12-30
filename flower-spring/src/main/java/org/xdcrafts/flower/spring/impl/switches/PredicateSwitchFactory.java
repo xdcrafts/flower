@@ -16,24 +16,12 @@
 
 package org.xdcrafts.flower.spring.impl.switches;
 
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.switches.PredicateSwitch;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * PredicateSwitch factory bean.
  */
 public class PredicateSwitchFactory extends AbstractSwitchFactoryBean<PredicateSwitch> {
-
-    public PredicateSwitchFactory() {
-        super(Collections.emptyList());
-    }
-
-    public PredicateSwitchFactory(List<Middleware> middlewares) {
-        super(middlewares);
-    }
 
     @Override
     public Class<?> getObjectType() {
@@ -42,6 +30,6 @@ public class PredicateSwitchFactory extends AbstractSwitchFactoryBean<PredicateS
 
     @Override
     protected PredicateSwitch createInstance() throws Exception {
-        return new PredicateSwitch(getBeanName(), getRoutes(getBeanName()), getMiddlewares());
+        return new PredicateSwitch(getBeanName(), fetchExtensions(getBeanName()), getMiddlewares());
     }
 }

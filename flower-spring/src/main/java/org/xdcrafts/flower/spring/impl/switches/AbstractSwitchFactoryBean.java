@@ -17,15 +17,12 @@
 package org.xdcrafts.flower.spring.impl.switches;
 
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
-import org.xdcrafts.flower.spring.Feature;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,11 +32,9 @@ import java.util.stream.Collectors;
 public abstract class AbstractSwitchFactoryBean<T>
     extends AbstractActionFactoryBean<T> implements ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
+    private static final String SWITCH = "switch";
 
-    public AbstractSwitchFactoryBean(List<Middleware> middlewares) {
-        super(middlewares);
-    }
+    private ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -53,17 +48,19 @@ public abstract class AbstractSwitchFactoryBean<T>
     /**
      * Scan application context and find all extensions within bundles that should be attached to router with full name.
      */
-    public List<Extension> getRoutes(String fullRouterName) {
+    protected List<Extension> fetchExtensions(String name) {
         return this.applicationContext
-            .getBeansOfType(Feature.class, true, false)
+            .getBeansOfType(Extension.class, true, false)
             .values()
             .stream()
-            .filter(Feature::isEnabled)
-            .map(Feature::extensions)
-            .flatMap(m -> m.entrySet().stream())
-            .filter(e -> e.getValue().equals(fullRouterName))
-            .map(Map.Entry::getKey)
-            .map(name -> applicationContext.getBean(name, Extension.class))
-            .collect(Collectors.toList());
+            .filter(e -> {
+                if (!e.configuration().containsKey(SWITCH)) {
+                    throw new IllegalStateException(
+                        "Expression '" + e.getName()
+                        + "' configuration: required key" + SWITCH + " not found. " + e.configuration()
+                    );
+                }
+                return e.configuration().get(SWITCH).toString().equals(name);
+            }).collect(Collectors.toList());
     }
 }

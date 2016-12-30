@@ -14,15 +14,12 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.spring.impl.extensions;
+package org.xdcrafts.flower.spring.impl;
 
 import org.xdcrafts.flower.core.Action;
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.extensions.DefaultExtension;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,13 +31,6 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
     private final Map configuration;
 
     public DefaultExtensionFactory(Action action, Map configuration) {
-        super(Collections.emptyList());
-        this.action = action;
-        this.configuration = configuration;
-    }
-
-    public DefaultExtensionFactory(Action action, Map configuration, List<Middleware> middlewares) {
-        super(middlewares);
         this.action = action;
         this.configuration = configuration;
     }

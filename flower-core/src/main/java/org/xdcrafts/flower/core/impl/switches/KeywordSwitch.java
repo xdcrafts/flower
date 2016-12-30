@@ -19,7 +19,6 @@ package org.xdcrafts.flower.core.impl.switches;
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.core.impl.extensions.KeywordExtension;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +31,13 @@ import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
  * Implementation of Switch that selects Action based on value of keyword in context.
  */
 public class KeywordSwitch extends MiddlewaredSwitchBase {
+
+    /**
+     * Class with configuration keys.
+     */
+    public static final class ConfigurationKeys {
+        public static final String KEYWORD_VALUE = "keyword-value";
+    }
 
     private final String name;
     private final String keyword;
@@ -50,9 +56,9 @@ public class KeywordSwitch extends MiddlewaredSwitchBase {
         this.actionsMapping = new HashMap<>();
         for (Extension extension : extensions) {
             final Map configuration = extension.configuration();
-            final String keywordValue = dotGetString(configuration, KeywordExtension.ConfigurationKeys.KEYWORD_VALUE)
+            final String keywordValue = dotGetString(configuration, ConfigurationKeys.KEYWORD_VALUE)
                 .orElseThrow(() -> new IllegalArgumentException(
-                    extension + ": '" + KeywordExtension.ConfigurationKeys.KEYWORD_VALUE + "' key required."
+                    extension + ": '" + ConfigurationKeys.KEYWORD_VALUE + "' key required."
                 ));
             actionsMapping.put(keywordValue, extension.action());
         }

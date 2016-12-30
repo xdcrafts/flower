@@ -16,23 +16,30 @@
 
 package org.xdcrafts.flower.spring;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.xdcrafts.flower.core.Middleware;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Abstract bean factory that aware of bean name.
  * @param <T> class type
  */
-public abstract class AbstractActionFactoryBean<T> extends AbstractFactoryBean<T> implements BeanNameAware {
+public abstract class AbstractActionFactoryBean<T>
+    extends AbstractFactoryBean<T>
+    implements BeanNameAware, ApplicationContextAware {
 
-    private final List<Middleware> middlewares;
+    private ApplicationContext applicationContext;
     private String beanName;
 
-    public AbstractActionFactoryBean(List<Middleware> middlewares) {
-        this.middlewares = middlewares;
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -48,6 +55,6 @@ public abstract class AbstractActionFactoryBean<T> extends AbstractFactoryBean<T
     }
 
     public List<Middleware> getMiddlewares() {
-        return middlewares;
+        return Collections.emptyList();
     }
 }

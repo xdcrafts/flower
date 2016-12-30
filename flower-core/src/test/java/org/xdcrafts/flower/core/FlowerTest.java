@@ -17,9 +17,9 @@
 package org.xdcrafts.flower.core;
 
 import org.xdcrafts.flower.core.impl.DefaultAction;
+import org.xdcrafts.flower.core.impl.extensions.DefaultExtension;
 import org.xdcrafts.flower.core.impl.flows.BasicSyncFlow;
 import org.xdcrafts.flower.core.impl.switches.KeywordSwitch;
-import org.xdcrafts.flower.core.impl.extensions.KeywordExtension;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,16 +77,24 @@ public class FlowerTest {
     @Test
     public void extensionsTest() {
         final Action firstAction = Action.action("first-action", ctx -> assoc(ctx, "data", "first", true));
-        final Extension firstExtension = new KeywordExtension("firstExtension", "first", firstAction);
+        final Extension firstExtension = new DefaultExtension(
+            "firstExtension",
+            firstAction,
+            with(new HashMap()).assoc(KeywordSwitch.ConfigurationKeys.KEYWORD_VALUE, "first").value()
+        );
         final Action secondAction = Action.action("second-action", ctx -> assoc(ctx, "data", "second", true));
-        final Extension secondExtension = new KeywordExtension("secondExtension", "second", secondAction);
-        final Switch keywordSwitchitch = new KeywordSwitch(
+        final Extension secondExtension = new DefaultExtension(
+            "secondExtension",
+            secondAction,
+            with(new HashMap()).assoc(KeywordSwitch.ConfigurationKeys.KEYWORD_VALUE, "second").value()
+        );
+        final Switch keywordSwitch = new KeywordSwitch(
             "aSwitch", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
         );
-        final Map firstResult = keywordSwitchitch.apply(
+        final Map firstResult = keywordSwitch.apply(
             with(new HashMap()).assoc("data", "selectAction", "first").value()
         );
-        final Map secondResult = keywordSwitchitch.apply(
+        final Map secondResult = keywordSwitch.apply(
             with(new HashMap()).assoc("data", "selectAction", "second").value()
         );
         assertTrue(getUnsafe(firstResult, Boolean.class, "data", "first"));

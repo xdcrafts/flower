@@ -17,28 +17,20 @@
 package org.xdcrafts.flower.spring.impl.flows;
 
 import org.xdcrafts.flower.core.Action;
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.flows.BasicSyncFlow;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Spring factory bean for basic sync flow that uses bean name as it's name.
+ * Spring factory bean for basic sync actions that uses bean name as it's name.
  */
 public class BasicSyncFlowFactory extends AbstractActionFactoryBean<BasicSyncFlow> {
 
-    private final List<Action> flow;
+    private List<Action> actions;
 
-    public BasicSyncFlowFactory(List<Action> flow) {
-        super(Collections.emptyList());
-        this.flow = flow;
-    }
-
-    public BasicSyncFlowFactory(List<Action> flow, List<Middleware> middlewares) {
-        super(middlewares);
-        this.flow = flow;
+    public BasicSyncFlowFactory(List<Action> actions) {
+        this.actions = actions;
     }
 
     @Override
@@ -48,6 +40,6 @@ public class BasicSyncFlowFactory extends AbstractActionFactoryBean<BasicSyncFlo
 
     @Override
     protected BasicSyncFlow createInstance() throws Exception {
-        return new BasicSyncFlow(getBeanName(), this.flow, getMiddlewares());
+        return new BasicSyncFlow(getBeanName(), this.actions, getMiddlewares());
     }
 }

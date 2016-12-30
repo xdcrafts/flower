@@ -19,7 +19,6 @@ package org.xdcrafts.flower.core.impl.switches;
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.core.impl.extensions.PredicateExtension;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +34,13 @@ import static org.xdcrafts.flower.tools.MapApi.get;
  */
 @SuppressWarnings("unchecked")
 public class PredicateSwitch extends MiddlewaredSwitchBase {
+
+    /**
+     * Class with configuration keys.
+     */
+    public static final class ConfigurationKeys {
+        public static final String PREDICATE = "predicate";
+    }
 
     private final String name;
     private final List<Extension> extensions;
@@ -54,9 +60,9 @@ public class PredicateSwitch extends MiddlewaredSwitchBase {
         for (Extension extension : extensions) {
             final Map configuration = extension.configuration();
             final Predicate predicate =
-                get(configuration, Predicate.class, PredicateExtension.ConfigurationKeys.PREDICATE)
+                get(configuration, Predicate.class, ConfigurationKeys.PREDICATE)
                 .orElseThrow(() -> new IllegalArgumentException(
-                    extension + ": '" + PredicateExtension.ConfigurationKeys.PREDICATE + "' key required."
+                    extension + ": '" + ConfigurationKeys.PREDICATE + "' key required."
                 ));
             predicates.add(predicate);
             actionsMapping.put(predicate, extension.action());
