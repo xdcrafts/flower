@@ -26,7 +26,7 @@ import java.util.function.Function;
 /**
  * Basic implementation of action.
  */
-public class DefaultAction extends MiddlewaredActionBase {
+public class DefaultAction extends WithMiddlewareActionBase {
 
     private final String name;
     private final Function<Map, Map> actionBody;
@@ -35,8 +35,8 @@ public class DefaultAction extends MiddlewaredActionBase {
         this(name, body, Collections.emptyList());
     }
 
-    public DefaultAction(String name, Function<Map, Map> body, List<Middleware> middlewares) {
-        super(middlewares);
+    public DefaultAction(String name, Function<Map, Map> body, List<Middleware> middleware) {
+        super(middleware);
         this.actionBody = body;
         this.name = name;
         this.meta.put("name", name);

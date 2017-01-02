@@ -76,6 +76,30 @@ public interface Named {
     }
 
     /**
+     * Extracts namespace from my.namespace.Name like string.
+     */
+    static String getNamespace(String name) {
+        return name.contains(".") ? name.substring(0, name.lastIndexOf(".")) : "";
+    }
+
+    /**
+     * Extracts simple name part from my.namespace.Name like string.
+     */
+    static String getSimpleName(String name) {
+        return name.contains(".") ? name.substring(name.lastIndexOf(".")) : name;
+    }
+
+    /**
+     * Returns fully qualified name {namespace}.{name}.
+     */
+    static String qualifiedName(String namespace, String name) {
+        return
+            name == null || name.isEmpty()
+                ? name
+                : namespace == null || namespace.isEmpty() ? name : namespace + "." + name;
+    }
+
+    /**
      * Returns name.
      */
     String getName();

@@ -19,7 +19,7 @@ package org.xdcrafts.flower.core.impl.flows;
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Flow;
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.core.impl.MiddlewaredActionBase;
+import org.xdcrafts.flower.core.impl.WithMiddlewareActionBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +32,7 @@ import static org.xdcrafts.flower.tools.MapApi.Mutable.assoc;
 /**
  * Basic implementation of asynchronous flow.
  */
-public class BasicAsyncFlow extends MiddlewaredActionBase implements Flow {
+public class BasicAsyncFlow extends WithMiddlewareActionBase implements Flow {
 
     private final String name;
     private final List<Action> actions;
@@ -45,9 +45,9 @@ public class BasicAsyncFlow extends MiddlewaredActionBase implements Flow {
     }
 
     public BasicAsyncFlow(
-        String name, List<Action> actions, ExecutorService executorService, List<Middleware> middlewares
+        String name, List<Action> actions, ExecutorService executorService, List<Middleware> middleware
     ) {
-        super(middlewares);
+        super(middleware);
         this.name = name;
         this.actions = Collections.unmodifiableList(actions);
         this.executorService = executorService;

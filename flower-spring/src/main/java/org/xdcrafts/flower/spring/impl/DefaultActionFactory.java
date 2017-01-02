@@ -16,18 +16,12 @@
 
 package org.xdcrafts.flower.spring.impl;
 
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.DefaultAction;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -35,37 +29,20 @@ import java.util.function.Function;
  * Spring factory bean for default action that uses bean name as action name.
  */
 public class DefaultActionFactory
-    extends AbstractActionFactoryBean<DefaultAction> implements ApplicationContextAware {
+    extends AbstractActionFactoryBean<DefaultAction> {
 
     private static final String SPLITTER = "::";
 
     private final String subject;
     private final String method;
-    private ApplicationContext applicationContext;
 
     public DefaultActionFactory(String method) {
-        super(Collections.emptyList());
         final String[] subjectAndMethod = method.split(SPLITTER);
         if (subjectAndMethod.length != 2) {
             throw new IllegalArgumentException();
         }
         this.subject = subjectAndMethod[0];
         this.method = subjectAndMethod[1];
-    }
-
-    public DefaultActionFactory(String method, List<Middleware> middlewares) {
-        super(middlewares);
-        final String[] subjectAndMethod = method.split(SPLITTER);
-        if (subjectAndMethod.length != 2) {
-            throw new IllegalArgumentException();
-        }
-        this.subject = subjectAndMethod[0];
-        this.method = subjectAndMethod[1];
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -78,7 +55,7 @@ public class DefaultActionFactory
         return new DefaultAction(
             getBeanName(),
             buildActionFunction(this.subject, this.method),
-            getMiddlewares()
+            getMiddleware(getBeanName())
         );
     }
 
@@ -109,8 +86,8 @@ public class DefaultActionFactory
         String classOrBeanName, String methodName
     ) {
         try {
-            final Object bean = this.applicationContext.containsBean(classOrBeanName)
-                ? this.applicationContext.getBean(classOrBeanName)
+            final Object bean = this.getApplicationContext().containsBean(classOrBeanName)
+                ? this.getApplicationContext().getBean(classOrBeanName)
                 : null;
             final boolean isVirtual = bean != null;
             final Class clazz = isVirtual ? bean.getClass() : Class.forName(classOrBeanName);
@@ -119,10 +96,9 @@ public class DefaultActionFactory
             final MethodHandle methodHandle = isVirtual
                 ? lookup.findVirtual(clazz, methodName, methodType)
                 : lookup.findStatic(clazz, methodName, methodType);
-            final Function<Map, Map> function = isVirtual
+            return isVirtual
                 ? ctx -> safeVirtualInvoke(methodHandle, bean, ctx)
                 : ctx -> safeStaticInvoke(methodHandle, ctx);
-            return function;
         } catch (Throwable throwable) {
             if (throwable instanceof RuntimeException) {
                 throw (RuntimeException) throwable;

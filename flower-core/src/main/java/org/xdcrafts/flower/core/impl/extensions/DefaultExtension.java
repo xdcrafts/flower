@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * Default implementation of Extension.
  */
-public class DefaultExtension extends MiddlewaredExtensionBase {
+public class DefaultExtension extends WithMiddlewareExtensionBase {
 
     private final String name;
     private final Action action;
@@ -36,8 +36,8 @@ public class DefaultExtension extends MiddlewaredExtensionBase {
         this(name, action, configuration, Collections.emptyList());
     }
 
-    public DefaultExtension(String name, Action action, Map configuration, List<Middleware> middlewares) {
-        super(middlewares);
+    public DefaultExtension(String name, Action action, Map configuration, List<Middleware> middleware) {
+        super(middleware);
         this.name = name;
         this.action = action;
         this.configuration = configuration;

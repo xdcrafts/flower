@@ -16,26 +16,16 @@
 
 package org.xdcrafts.flower.spring.impl.switches;
 
-import org.xdcrafts.flower.core.Middleware;
 import org.xdcrafts.flower.core.impl.switches.KeywordSwitch;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * KeywordSwitch factory bean.
  */
 public class KeywordSwitchFactory extends AbstractSwitchFactoryBean<KeywordSwitch> {
 
-    private final String keyword;
+    private String keyword;
 
     public KeywordSwitchFactory(String keyword) {
-        super(Collections.emptyList());
-        this.keyword = keyword;
-    }
-
-    public KeywordSwitchFactory(String keyword, List<Middleware> middlewares) {
-        super(middlewares);
         this.keyword = keyword;
     }
 
@@ -46,6 +36,8 @@ public class KeywordSwitchFactory extends AbstractSwitchFactoryBean<KeywordSwitc
 
     @Override
     protected KeywordSwitch createInstance() throws Exception {
-        return new KeywordSwitch(getBeanName(), this.keyword, getRoutes(getBeanName()), getMiddlewares());
+        return new KeywordSwitch(
+            getBeanName(), this.keyword, fetchExtensions(getBeanName()), getMiddleware(getBeanName())
+        );
     }
 }
