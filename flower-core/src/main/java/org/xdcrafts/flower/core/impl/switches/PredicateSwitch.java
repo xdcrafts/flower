@@ -20,11 +20,7 @@ import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
 import org.xdcrafts.flower.core.Middleware;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static org.xdcrafts.flower.tools.MapApi.get;
@@ -34,13 +30,6 @@ import static org.xdcrafts.flower.tools.MapApi.get;
  */
 @SuppressWarnings("unchecked")
 public class PredicateSwitch extends WithMiddlewareSwitchBase {
-
-    /**
-     * Class with configuration keys.
-     */
-    public static final class ConfigurationKeys {
-        public static final String PREDICATE = "predicate";
-    }
 
     /**
      * Class with configuration keys.

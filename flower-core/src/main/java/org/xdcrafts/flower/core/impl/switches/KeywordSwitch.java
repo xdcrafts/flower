@@ -39,13 +39,6 @@ public class KeywordSwitch extends WithMiddlewareSwitchBase {
         public static final String KEYWORD_VALUE = "keyword-value";
     }
 
-    /**
-     * Class with configuration keys.
-     */
-    public static final class ConfigurationKeys {
-        public static final String KEYWORD_VALUE = "keyword-value";
-    }
-
     private final String name;
     private final String keyword;
     private final List<Extension> extensions;
