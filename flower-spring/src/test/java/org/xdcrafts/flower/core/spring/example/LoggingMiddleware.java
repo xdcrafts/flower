@@ -39,4 +39,9 @@ public class LoggingMiddleware implements Middleware {
             return out;
         };
     }
+
+    @Override
+    public String getName() {
+        return getClass().getSimpleName();
+    }
 }

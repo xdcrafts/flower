@@ -104,4 +104,17 @@ public interface Named {
      */
     String getName();
 
+    /**
+     * Returns simple part of name.
+     */
+    default String getSimpleName() {
+        return getSimpleName(getName());
+    }
+
+    /**
+     * Returns namespace part of name.
+     */
+    default String getNamespace() {
+        return getNamespace(getName());
+    }
 }

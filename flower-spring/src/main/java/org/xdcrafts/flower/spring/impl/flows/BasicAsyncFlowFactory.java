@@ -18,7 +18,7 @@ package org.xdcrafts.flower.spring.impl.flows;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.impl.flows.BasicAsyncFlow;
-import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
+import org.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

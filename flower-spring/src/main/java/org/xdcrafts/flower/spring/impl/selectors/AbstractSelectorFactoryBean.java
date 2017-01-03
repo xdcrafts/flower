@@ -17,7 +17,7 @@
 package org.xdcrafts.flower.spring.impl.selectors;
 
 import org.xdcrafts.flower.core.Extension;
-import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
+import org.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
 
 import java.util.List;
 import java.util.stream.Collectors;

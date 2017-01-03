@@ -16,6 +16,9 @@
 
 package org.xdcrafts.flower.core;
 
+import org.xdcrafts.flower.core.impl.DefaultMiddleware;
+import org.xdcrafts.flower.tools.Named;
+
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -23,5 +26,15 @@ import java.util.function.Function;
 /**
  * Middleware interface.
  */
-public interface Middleware extends BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>> {
+public interface Middleware extends Named, BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>> {
+
+    /**
+     * Creates default implementation of Middleware.
+     */
+    static Middleware middleware(
+        String name,
+        BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>> body
+    ) {
+        return new DefaultMiddleware(name, body);
+    }
 }

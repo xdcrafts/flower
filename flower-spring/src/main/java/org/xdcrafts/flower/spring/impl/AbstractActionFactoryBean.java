@@ -14,14 +14,11 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.spring;
+package org.xdcrafts.flower.spring.impl;
 
-import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.spring.impl.MiddlewareDefinition;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,27 +26,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Abstract bean factory that aware of bean name.
+ * Abstract action bean factory that aware of bean name.
  * @param <T> class type
  */
 public abstract class AbstractActionFactoryBean<T>
-    extends AbstractFactoryBean<T>
-    implements BeanNameAware, ApplicationContextAware {
+    extends AbstractNameAwareFactoryBean<T>
+    implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
-    private String beanName;
-
-    @Override
-    public void setBeanName(String name) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name can not be null or empty string!");
-        }
-        this.beanName = name;
-    }
-
-    public String getBeanName() {
-        return this.beanName;
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {

@@ -17,7 +17,6 @@
 package org.xdcrafts.flower.spring.impl;
 
 import org.xdcrafts.flower.core.impl.DefaultAction;
-import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;

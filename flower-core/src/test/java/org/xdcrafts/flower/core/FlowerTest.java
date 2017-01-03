@@ -46,10 +46,10 @@ public class FlowerTest {
 
     @Test
     public void test() {
-        final Middleware counterMiddleware = (map, function) -> ctx -> {
+        final Middleware counterMiddleware = Middleware.middleware("counterMiddleware", (map, function) -> ctx -> {
             final int counter = get(ctx, Integer.class, "meta", "dummy").orElse(0);
             return function.apply(assoc(ctx, "meta", "dummy", counter + 1));
-        };
+        });
         final Action firstAction = new DefaultAction(
             "firstAction",
             ctx -> assoc(ctx, "data", "first", true),
@@ -89,7 +89,7 @@ public class FlowerTest {
             with(new HashMap()).assoc(KeywordSelector.ConfigurationKeys.KEYWORD_VALUE, "second").value()
         );
         final Selector keywordSelector = new KeywordSelector(
-            "aselector", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
+            "aSelector", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
         );
         final Map firstResult = keywordSelector.apply(
             with(new HashMap()).assoc("data", "selectAction", "first").value()

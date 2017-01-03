@@ -18,7 +18,6 @@ package org.xdcrafts.flower.spring.impl;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.impl.extensions.DefaultExtension;
-import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
 
 import java.util.Map;
 
