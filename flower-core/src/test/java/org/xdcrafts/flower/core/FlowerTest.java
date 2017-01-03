@@ -19,7 +19,7 @@ package org.xdcrafts.flower.core;
 import org.xdcrafts.flower.core.impl.DefaultAction;
 import org.xdcrafts.flower.core.impl.extensions.DefaultExtension;
 import org.xdcrafts.flower.core.impl.flows.BasicSyncFlow;
-import org.xdcrafts.flower.core.impl.switches.KeywordSwitch;
+import org.xdcrafts.flower.core.impl.selectors.KeywordSelector;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,21 +80,21 @@ public class FlowerTest {
         final Extension firstExtension = new DefaultExtension(
             "firstExtension",
             firstAction,
-            with(new HashMap()).assoc(KeywordSwitch.ConfigurationKeys.KEYWORD_VALUE, "first").value()
+            with(new HashMap()).assoc(KeywordSelector.ConfigurationKeys.KEYWORD_VALUE, "first").value()
         );
         final Action secondAction = Action.action("second-action", ctx -> assoc(ctx, "data", "second", true));
         final Extension secondExtension = new DefaultExtension(
             "secondExtension",
             secondAction,
-            with(new HashMap()).assoc(KeywordSwitch.ConfigurationKeys.KEYWORD_VALUE, "second").value()
+            with(new HashMap()).assoc(KeywordSelector.ConfigurationKeys.KEYWORD_VALUE, "second").value()
         );
-        final Switch keywordSwitch = new KeywordSwitch(
-            "aSwitch", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
+        final Selector keywordSelector = new KeywordSelector(
+            "aselector", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
         );
-        final Map firstResult = keywordSwitch.apply(
+        final Map firstResult = keywordSelector.apply(
             with(new HashMap()).assoc("data", "selectAction", "first").value()
         );
-        final Map secondResult = keywordSwitch.apply(
+        final Map secondResult = keywordSelector.apply(
             with(new HashMap()).assoc("data", "selectAction", "second").value()
         );
         assertTrue(getUnsafe(firstResult, Boolean.class, "data", "first"));

@@ -14,21 +14,21 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.impl.switches;
+package org.xdcrafts.flower.core.impl.selectors;
 
 import org.xdcrafts.flower.core.Middleware;
-import org.xdcrafts.flower.core.Switch;
+import org.xdcrafts.flower.core.Selector;
 import org.xdcrafts.flower.core.impl.WithMiddlewareActionBase;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Abstract class as a base for any Switch implementation.
+ * Abstract class as a base for any Selector implementation.
  */
-public abstract class WithMiddlewareSwitchBase extends WithMiddlewareActionBase implements Switch {
+public abstract class WithMiddlewareSelectorBase extends WithMiddlewareActionBase implements Selector {
 
-    public WithMiddlewareSwitchBase(List<Middleware> middleware) {
+    public WithMiddlewareSelectorBase(List<Middleware> middleware) {
         super(middleware);
     }
 

@@ -82,7 +82,7 @@
     <bean class="org.xdcrafts.flower.spring.impl.MiddlewareDefinition">
         <constructor-arg name="definition">
             <map>
-                <entry key="switcher" value="loggingMiddleware"/>
+                <entry key="selector" value="loggingMiddleware"/>
             </map>
         </constructor-arg>
     </bean>
@@ -100,7 +100,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="switcher" class="org.xdcrafts.flower.spring.impl.switches.KeywordSwitchFactory">
+    <bean id="selector" class="org.xdcrafts.flower.spring.impl.selectors.KeywordSelectorFactory">
         <constructor-arg name="keyword" value="request.type"/>
     </bean>
 
@@ -112,7 +112,7 @@
         <constructor-arg name="actions">
             <list>
                 <ref bean="authenticatorAction"/>
-                <ref bean="switcher"/>
+                <ref bean="selector"/>
                 <ref bean="receiverAction"/>
             </list>
         </constructor-arg>

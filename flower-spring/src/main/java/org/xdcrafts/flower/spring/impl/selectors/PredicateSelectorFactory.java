@@ -14,22 +14,22 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.spring.impl.switches;
+package org.xdcrafts.flower.spring.impl.selectors;
 
-import org.xdcrafts.flower.core.impl.switches.PredicateSwitch;
+import org.xdcrafts.flower.core.impl.selectors.PredicateSelector;
 
 /**
- * PredicateSwitch factory bean.
+ * PredicateSelector factory bean.
  */
-public class PredicateSwitchFactory extends AbstractSwitchFactoryBean<PredicateSwitch> {
+public class PredicateSelectorFactory extends AbstractSelectorFactoryBean<PredicateSelector> {
 
     @Override
     public Class<?> getObjectType() {
-        return PredicateSwitch.class;
+        return PredicateSelector.class;
     }
 
     @Override
-    protected PredicateSwitch createInstance() throws Exception {
-        return new PredicateSwitch(getBeanName(), fetchExtensions(getBeanName()), getMiddleware(getBeanName()));
+    protected PredicateSelector createInstance() throws Exception {
+        return new PredicateSelector(getBeanName(), fetchExtensions(getBeanName()), getMiddleware(getBeanName()));
     }
 }

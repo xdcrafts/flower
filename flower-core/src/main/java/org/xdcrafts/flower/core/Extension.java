@@ -43,7 +43,7 @@ public interface Extension extends Action {
 
     /**
      * Conditions when this selectAction should be chosen.
-     * Contains data specific for concrete router implementation.
+     * Contains data specific for concrete selector implementation.
      */
     Map configuration();
 }

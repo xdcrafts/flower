@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.impl.switches;
+package org.xdcrafts.flower.core.impl.selectors;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
@@ -30,10 +30,10 @@ import java.util.function.Predicate;
 import static org.xdcrafts.flower.tools.MapApi.get;
 
 /**
- * Implementation of Switch that selects Action based on predicates.
+ * Implementation of Selector that selects Action based on predicates.
  */
 @SuppressWarnings("unchecked")
-public class PredicateSwitch extends WithMiddlewareSwitchBase {
+public class PredicateSelector extends WithMiddlewareSelectorBase {
 
     /**
      * Class with configuration keys.
@@ -47,11 +47,11 @@ public class PredicateSwitch extends WithMiddlewareSwitchBase {
     private final List<Predicate<Map>> predicates;
     private final Map<Predicate, Action> actionsMapping;
 
-    public PredicateSwitch(String name, List<Extension> extensions) {
+    public PredicateSelector(String name, List<Extension> extensions) {
         this(name, extensions, Collections.emptyList());
     }
 
-    public PredicateSwitch(String name, List<Extension> extensions, List<Middleware> middleware) {
+    public PredicateSelector(String name, List<Extension> extensions, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
         this.extensions = extensions;
@@ -93,7 +93,7 @@ public class PredicateSwitch extends WithMiddlewareSwitchBase {
 
     @Override
     public String toString() {
-        return "PredicateSwitch{"
+        return "PredicateSelector{"
                 + "name='" + this.name + '\''
                 + ", extensions=" + extensions
                 + ", predicates=" + predicates

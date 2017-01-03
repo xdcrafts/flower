@@ -14,29 +14,29 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.spring.impl.switches;
+package org.xdcrafts.flower.spring.impl.selectors;
 
-import org.xdcrafts.flower.core.impl.switches.KeywordSwitch;
+import org.xdcrafts.flower.core.impl.selectors.KeywordSelector;
 
 /**
- * KeywordSwitch factory bean.
+ * KeywordSelector factory bean.
  */
-public class KeywordSwitchFactory extends AbstractSwitchFactoryBean<KeywordSwitch> {
+public class KeywordSelectorFactory extends AbstractSelectorFactoryBean<KeywordSelector> {
 
     private String keyword;
 
-    public KeywordSwitchFactory(String keyword) {
+    public KeywordSelectorFactory(String keyword) {
         this.keyword = keyword;
     }
 
     @Override
     public Class<?> getObjectType() {
-        return KeywordSwitch.class;
+        return KeywordSelector.class;
     }
 
     @Override
-    protected KeywordSwitch createInstance() throws Exception {
-        return new KeywordSwitch(
+    protected KeywordSelector createInstance() throws Exception {
+        return new KeywordSelector(
             getBeanName(), this.keyword, fetchExtensions(getBeanName()), getMiddleware(getBeanName())
         );
     }

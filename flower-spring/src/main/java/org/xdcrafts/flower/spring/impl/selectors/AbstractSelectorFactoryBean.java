@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.spring.impl.switches;
+package org.xdcrafts.flower.spring.impl.selectors;
 
 import org.xdcrafts.flower.core.Extension;
 import org.xdcrafts.flower.spring.AbstractActionFactoryBean;
@@ -23,15 +23,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Abstract class for switches factory beans.
+ * Abstract class for selectors factory beans.
  * @param <T>
  */
-public abstract class AbstractSwitchFactoryBean<T> extends AbstractActionFactoryBean<T> {
+public abstract class AbstractSelectorFactoryBean<T> extends AbstractActionFactoryBean<T> {
 
-    private static final String SWITCH = "switch";
+    private static final String SELECTOR = "selector";
 
     /**
-     * Scan application context and find all extensions within bundles that should be attached to switch with name.
+     * Scan application context and find all extensions within bundles that should be attached to selector with name.
      */
     protected List<Extension> fetchExtensions(String name) {
         return getApplicationContext()
@@ -39,13 +39,13 @@ public abstract class AbstractSwitchFactoryBean<T> extends AbstractActionFactory
             .values()
             .stream()
             .filter(e -> {
-                if (!e.configuration().containsKey(SWITCH)) {
+                if (!e.configuration().containsKey(SELECTOR)) {
                     throw new IllegalStateException(
                         "Expression '" + e.getName()
-                        + "' configuration: required key" + SWITCH + " not found. " + e.configuration()
+                        + "' configuration: required key" + SELECTOR + " not found. " + e.configuration()
                     );
                 }
-                return e.configuration().get(SWITCH).toString().equals(name);
+                return e.configuration().get(SELECTOR).toString().equals(name);
             }).collect(Collectors.toList());
     }
 }

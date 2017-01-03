@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package org.xdcrafts.flower.core.impl.switches;
+package org.xdcrafts.flower.core.impl.selectors;
 
 import org.xdcrafts.flower.core.Action;
 import org.xdcrafts.flower.core.Extension;
@@ -28,9 +28,9 @@ import java.util.Map;
 import static org.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
 
 /**
- * Implementation of Switch that selects Action based on value of keyword in context.
+ * Implementation of Selector that selects Action based on value of keyword in context.
  */
-public class KeywordSwitch extends WithMiddlewareSwitchBase {
+public class KeywordSelector extends WithMiddlewareSelectorBase {
 
     /**
      * Class with configuration keys.
@@ -44,11 +44,11 @@ public class KeywordSwitch extends WithMiddlewareSwitchBase {
     private final List<Extension> extensions;
     private final Map<String, Action> actionsMapping;
 
-    public KeywordSwitch(String name, String keyword, List<Extension> extensions) {
+    public KeywordSelector(String name, String keyword, List<Extension> extensions) {
         this(name, keyword, extensions, Collections.emptyList());
     }
 
-    public KeywordSwitch(String name, String keyword, List<Extension> extensions, List<Middleware> middleware) {
+    public KeywordSelector(String name, String keyword, List<Extension> extensions, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
         this.keyword = keyword;
@@ -93,7 +93,7 @@ public class KeywordSwitch extends WithMiddlewareSwitchBase {
 
     @Override
     public String toString() {
-        return "KeywordSwitch{"
+        return "KeywordSelector{"
                 + "name='" + this.name + '\''
                 + ", keyword=" + this.keyword
                 + ", extensions=" + extensions

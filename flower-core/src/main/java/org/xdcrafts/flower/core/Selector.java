@@ -22,10 +22,10 @@ import java.util.Map;
 /**
  * Action that makes decision about where should flow go.
  */
-public interface Switch extends Action {
+public interface Selector extends Action {
 
     /**
-     * Returns extensions registered in this router.
+     * Returns extensions registered in this selector.
      */
     List<Extension> extensions();
 
