@@ -43,6 +43,7 @@ public class DefaultExtension extends WithMiddlewareExtensionBase {
         this.configuration = configuration;
         this.meta.put("name", name);
         this.meta.put("class", getClass().getName());
+        this.meta.put("middleware", middleware);
     }
 
     @Override

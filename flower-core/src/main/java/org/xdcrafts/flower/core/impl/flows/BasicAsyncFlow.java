@@ -53,6 +53,7 @@ public class BasicAsyncFlow extends WithMiddlewareActionBase implements Flow {
         this.executorService = executorService;
         this.meta.put("name", name);
         this.meta.put("class", getClass().getName());
+        this.meta.put("middleware", middleware);
     }
 
     @Override

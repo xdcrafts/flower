@@ -69,6 +69,7 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
         }
         this.meta.put("name", name);
         this.meta.put("class", getClass().getName());
+        this.meta.put("middleware", middleware);
     }
 
     @Override

@@ -41,6 +41,7 @@ public class DefaultAction extends WithMiddlewareActionBase {
         this.name = name;
         this.meta.put("name", name);
         this.meta.put("class", getClass().getName());
+        this.meta.put("middleware", middleware);
     }
 
     @Override
