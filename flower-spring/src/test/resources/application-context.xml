@@ -27,11 +27,11 @@
 
     <!--                                Simple beans start                                                       -->
 
-    <bean id="authenticator" class="org.xdcrafts.flower.core.spring.example.Authenticator">
+    <bean id="authenticator" class="com.github.xdcrafts.flower.core.spring.example.Authenticator">
         <constructor-arg name="users">
             <map>
                 <entry key="secret-admin">
-                    <bean class="org.xdcrafts.flower.core.spring.example.User">
+                    <bean class="com.github.xdcrafts.flower.core.spring.example.User">
                         <constructor-arg name="name" value="admin"/>
                         <constructor-arg name="email" value="admin@example.com"/>
                         <constructor-arg name="password" value="adminpwd"/>
@@ -44,7 +44,7 @@
                     </bean>
                 </entry>
                 <entry key="sms-only-user">
-                    <bean class="org.xdcrafts.flower.core.spring.example.User">
+                    <bean class="com.github.xdcrafts.flower.core.spring.example.User">
                         <constructor-arg name="name" value="sms-only-user"/>
                         <constructor-arg name="email" value="sms-only-user@example.com"/>
                         <constructor-arg name="password" value="smsonlypwd"/>
@@ -56,7 +56,7 @@
                     </bean>
                 </entry>
                 <entry key="email-only-user">
-                    <bean class="org.xdcrafts.flower.core.spring.example.User">
+                    <bean class="com.github.xdcrafts.flower.core.spring.example.User">
                         <constructor-arg name="name" value="email-only-user"/>
                         <constructor-arg name="email" value="email-only-user@example.com"/>
                         <constructor-arg name="password" value="emailonlypwd"/>
@@ -71,7 +71,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="receiver" class="org.xdcrafts.flower.core.spring.example.Receiver"/>
+    <bean id="receiver" class="com.github.xdcrafts.flower.core.spring.example.Receiver"/>
 
     <!--                                  Simple beans end                                                       -->
 
@@ -79,7 +79,7 @@
 
 
 
-    <bean class="org.xdcrafts.flower.spring.impl.MiddlewareDefinition">
+    <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
         <constructor-arg name="definition">
             <map>
                 <entry key="selector" value="loggingMiddleware"/>
@@ -91,7 +91,7 @@
 
     <!--                                  Actions start                                                          -->
 
-    <bean class="org.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
+    <bean class="com.github.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
         <constructor-arg name="actions">
             <map>
                 <entry key="authenticatorAction" value="authenticator::authenticate"/>
@@ -100,7 +100,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="selector" class="org.xdcrafts.flower.spring.impl.selectors.KeywordSelectorFactory">
+    <bean id="selector" class="com.github.xdcrafts.flower.spring.impl.selectors.KeywordSelectorFactory">
         <constructor-arg name="keyword" value="request.type"/>
     </bean>
 
@@ -108,7 +108,7 @@
 
     <!--                                  Flows start                                                            -->
 
-    <bean id="mainFlow" class="org.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
+    <bean id="mainFlow" class="com.github.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
         <constructor-arg name="actions">
             <list>
                 <ref bean="authenticatorAction"/>

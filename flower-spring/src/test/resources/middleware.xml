@@ -22,6 +22,6 @@
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
 
-    <bean id="loggingMiddleware" class="org.xdcrafts.flower.core.spring.example.LoggingMiddleware"/>
+    <bean id="loggingMiddleware" class="com.github.xdcrafts.flower.core.spring.example.LoggingMiddleware"/>
 
 </beans>

@@ -8,17 +8,17 @@
 
     <!--                                Simple beans start                                                       -->
 
-    <bean id="sms.RequestValidator" class="org.xdcrafts.flower.core.spring.example.sms.SmsRequestValidator"/>
+    <bean id="sms.RequestValidator" class="com.github.xdcrafts.flower.core.spring.example.sms.SmsRequestValidator"/>
 
-    <bean id="sms.Authorizer" class="org.xdcrafts.flower.core.spring.example.sms.SmsAuthorizer"/>
+    <bean id="sms.Authorizer" class="com.github.xdcrafts.flower.core.spring.example.sms.SmsAuthorizer"/>
 
-    <bean id="sms.Sender" class="org.xdcrafts.flower.core.spring.example.sms.SmsSender"/>
+    <bean id="sms.Sender" class="com.github.xdcrafts.flower.core.spring.example.sms.SmsSender"/>
 
     <!--                                  Simple beans end                                                       -->
 
     <!--                                  Actions start                                                          -->
 
-    <bean class="org.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
+    <bean class="com.github.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
         <constructor-arg name="namespace" value="sms"/>
         <constructor-arg name="actions">
             <map>
@@ -33,7 +33,7 @@
 
     <!--                                  Flows start                                                            -->
 
-    <bean id="sms.Flow" class="org.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
+    <bean id="sms.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
         <constructor-arg name="actions">
             <list>
                 <ref bean="sms.Validate"/>
@@ -47,7 +47,7 @@
 
     <!--                                  Extensions start                                                       -->
 
-    <bean id="sms.Extension" class="org.xdcrafts.flower.spring.impl.DefaultExtensionFactory">
+    <bean id="sms.Extension" class="com.github.xdcrafts.flower.spring.impl.DefaultExtensionFactory">
         <constructor-arg name="action" ref="sms.Flow"/>
         <constructor-arg name="configuration">
             <map>
