@@ -32,14 +32,14 @@ import java.util.Map;
 public class DefaultActionDefinitionFactory implements BeanDefinitionRegistryPostProcessor {
 
     private final String namespace;
-    private final Map<String, String> actions;
+    private final Map<String, Object> actions;
 
-    public DefaultActionDefinitionFactory(Map<String, String> actions) {
+    public DefaultActionDefinitionFactory(Map<String, Object> actions) {
         this.namespace = null;
         this.actions = actions;
     }
 
-    public DefaultActionDefinitionFactory(String namespace, Map<String, String> actions) {
+    public DefaultActionDefinitionFactory(String namespace, Map<String, Object> actions) {
         this.namespace = namespace;
         this.actions = actions;
     }
@@ -49,7 +49,7 @@ public class DefaultActionDefinitionFactory implements BeanDefinitionRegistryPos
         actions.entrySet().forEach(entry -> {
             final String name = entry.getKey();
             final String qualifiedName = Named.qualifiedName(this.namespace, name);
-            final String method = entry.getValue();
+            final Object method = entry.getValue();
             final ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
             constructorArgumentValues.addGenericArgumentValue(method);
             final GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
