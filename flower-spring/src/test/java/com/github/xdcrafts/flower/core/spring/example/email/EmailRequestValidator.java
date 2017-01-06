@@ -34,10 +34,9 @@ public class EmailRequestValidator {
         public static final String TEXT = "text";
     }
 
-    public Map validate(Map request) {
+    public void validate(Map request) {
         MapApi.getString(request, Keywords.TO).orElseThrow(() -> new RuntimeException("'to' is required field."));
         MapApi.getString(request, Keywords.CC).orElseThrow(() -> new RuntimeException("'cc' is required field."));
         MapApi.getString(request, Keywords.TEXT).orElseThrow(() -> new RuntimeException("'text' is required field."));
-        return request;
     }
 }

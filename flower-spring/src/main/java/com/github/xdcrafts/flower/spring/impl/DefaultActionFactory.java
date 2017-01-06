@@ -17,14 +17,12 @@
 package com.github.xdcrafts.flower.spring.impl;
 
 import com.github.xdcrafts.flower.core.impl.DefaultAction;
-import com.github.xdcrafts.flower.tools.ClassApi;
-import org.springframework.core.convert.converter.Converter;
+import com.github.xdcrafts.flower.spring.MethodConverter;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +39,19 @@ public class DefaultActionFactory
 
     private static final String SPLITTER = "::";
 
-    private final Object subject;
+    private final String subject;
+    private final String method;
 
-    public DefaultActionFactory(Object method) {
-        this.subject = method;
+    public DefaultActionFactory(String method) {
+        final String[] subjectAndMethod = method.split(SPLITTER);
+        if (subjectAndMethod.length != 2) {
+            throw new IllegalArgumentException(
+                "Invalid action declaration. Either "
+                + "<qualified-class-name>::<method-name> or <bean-name>::<method-name> expected,"
+            );
+        }
+        this.subject = subjectAndMethod[0];
+        this.method = subjectAndMethod[1];
     }
 
     @Override
@@ -56,7 +63,7 @@ public class DefaultActionFactory
     protected DefaultAction createInstance() throws Exception {
         return new DefaultAction(
             getBeanName(),
-            buildActionFunction(this.subject),
+            buildActionFunction(this.subject, this.method),
             getMiddleware(getBeanName())
         );
     }
@@ -89,102 +96,85 @@ public class DefaultActionFactory
         }
     }
 
-    private Function<Map, Map> buildActionFunction(Object object) {
-        final Function<Map, Map> actionFunction;
-        if (object instanceof String) {
-            final String[] subjectAndMethod = object.toString().split(SPLITTER);
-            if (subjectAndMethod.length != 2) {
-                throw new IllegalArgumentException(
-                    "Invalid action declaration. Either "
-                    + "<qualified-class-name>::<method-name> or <bean-name>::<method-name> expected,"
-                );
-            }
-            actionFunction = resolveFunction(subjectAndMethod[0], subjectAndMethod[1]);
-        } else {
-            actionFunction = convertToFunction(object);
-        }
-        return actionFunction;
-    }
-
-    private Function<Map, Map> resolveFunction(String classOrBeanName, String methodName) {
+    private Function<Map, Map> buildActionFunction(String classOrBeanName, String methodName) {
         try {
             final Object bean = this.getApplicationContext().containsBean(classOrBeanName)
                 ? this.getApplicationContext().getBean(classOrBeanName)
                 : null;
             final boolean isVirtual = bean != null;
             final Class clazz = isVirtual ? bean.getClass() : Class.forName(classOrBeanName);
-            final MethodHandles.Lookup lookup = MethodHandles.lookup();
-            final MethodType methodType = MethodType.methodType(Map.class, Map.class);
-            final MethodHandle methodHandle = isVirtual
-                ? lookup.findVirtual(clazz, methodName, methodType)
-                : lookup.findStatic(clazz, methodName, methodType);
-            return isVirtual
-                ? ctx -> safeVirtualInvoke(methodHandle, bean, ctx)
-                : ctx -> safeStaticInvoke(methodHandle, ctx);
+            final List<Method> methods = Arrays.stream(clazz.getDeclaredMethods())
+                .filter(m -> m.getName().equals(methodName))
+                .collect(Collectors.toList());
+            if (methods.isEmpty()) {
+                throw new IllegalArgumentException(classOrBeanName + "::" + methodName + " not found");
+            }
+            if (methods.size() > 1) {
+                throw new IllegalArgumentException(
+                    classOrBeanName + "::" + methodName
+                    + " more then one method found, can not decide which one to use. "
+                    + methods
+                );
+            }
+            final Method declaredMethod = methods.get(0);
+            final Class returnType = declaredMethod.getReturnType();
+            final Class[] parameterTypes = declaredMethod.getParameterTypes();
+            if (Map.class.isAssignableFrom(returnType)
+                && parameterTypes.length == 1
+                && Map.class.isAssignableFrom(parameterTypes[0])) {
+                final MethodHandles.Lookup lookup = MethodHandles.lookup();
+                final MethodType methodType = MethodType.methodType(Map.class, Map.class);
+                final MethodHandle methodHandle = isVirtual
+                    ? lookup.findVirtual(clazz, methodName, methodType)
+                    : lookup.findStatic(clazz, methodName, methodType);
+                return isVirtual
+                    ? ctx -> safeVirtualInvoke(methodHandle, bean, ctx)
+                    : ctx -> safeStaticInvoke(methodHandle, ctx);
+            } else {
+                final Map<String, MethodConverter> converterBeans = this.getApplicationContext()
+                    .getBeansOfType(MethodConverter.class, true, false);
+                final Map<MethodConverter, Integer> converterToDistance = converterBeans
+                    .values()
+                    .stream()
+                    .map(c -> new AbstractMap.SimpleEntry<>(
+                        c,
+                        c.priority(declaredMethod)
+                    ))
+                    .filter(e -> e.getValue() >= 0)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                if (converterToDistance.isEmpty()) {
+                    throw new IllegalStateException(
+                        "MethodConverter<" + clazz + "> not found, unable to construct action."
+                    );
+                }
+                final int minimalDistance = converterToDistance
+                    .values()
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .reduce(Integer.MAX_VALUE, Integer::min);
+                final List<MethodConverter> converters = converterToDistance
+                    .entrySet()
+                    .stream()
+                    .filter(e -> e.getValue() == minimalDistance)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+                if (converters.size() > 1) {
+                    final Map<String, MethodConverter> ambiguousConverters = converterBeans
+                        .entrySet()
+                        .stream()
+                        .filter(e -> converters.contains(e.getValue()))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    throw new IllegalStateException(
+                        "Ambiguous MethodConverters for " + clazz + ". " + ambiguousConverters
+                    );
+                }
+                return converters.get(0).convert(bean);
+            }
         } catch (Throwable throwable) {
             if (throwable instanceof RuntimeException) {
                 throw (RuntimeException) throwable;
             }
             throw new RuntimeException(throwable);
         }
-    }
-
-    private Function<Map, Map> convertToFunction(Object object) {
-        final Map<String, Converter> converterBeans = this.getApplicationContext()
-            .getBeansOfType(Converter.class, true, false);
-        final Map<Converter, Integer> converterToDistance = converterBeans
-            .values()
-            .stream()
-            .map(c -> new AbstractMap.SimpleEntry<>(
-                c,
-                Arrays.asList(ClassApi.resolveActualTypeArgs(c.getClass(), Converter.class))
-            ))
-            .filter(entry -> {
-                final Type first = entry.getValue().get(0);
-                if (!(first instanceof Class)) {
-                    return false;
-                }
-                final Type second = entry.getValue().get(1);
-                if (!(second instanceof ParameterizedType)) {
-                    return false;
-                }
-                final Class firstClass = (Class) first;
-                final ParameterizedType secondParametrized = (ParameterizedType) second;
-                return firstClass.isAssignableFrom(object.getClass())
-                    && secondParametrized.getRawType().equals(Function.class)
-                    && Arrays.equals(secondParametrized.getActualTypeArguments(), new Type[]{Map.class, Map.class});
-            })
-            .map(entry -> new AbstractMap.SimpleEntry<>(
-                entry.getKey(),
-                distance(object.getClass(), (Class) entry.getValue().get(0), 0)
-            ))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        if (converterToDistance.isEmpty()) {
-            throw new IllegalStateException(
-                "Converter<" + object.getClass() + ", Function<Map, Map>> not found, unable to construct action."
-            );
-        }
-        final int minimalDistance = converterToDistance
-            .values()
-            .stream()
-            .mapToInt(Integer::intValue)
-            .reduce(Integer.MAX_VALUE, Integer::min);
-        final List<Converter> converters = converterToDistance
-            .entrySet()
-            .stream()
-            .filter(e -> e.getValue() == minimalDistance)
-            .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
-        if (converters.size() > 1) {
-            final Map<String, Converter> ambiguousConverters = converterBeans
-                .entrySet()
-                .stream()
-                .filter(e -> converters.contains(e.getValue()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            throw new IllegalStateException(
-                "Ambiguous Converter<" + object.getClass() + ", Function<Map, Map>>. " + ambiguousConverters
-            );
-        }
-        return (Function<Map, Map>) converters.get(0).convert(object);
     }
 }

@@ -32,14 +32,14 @@ import java.util.Map;
 public class DefaultActionDefinitionFactory implements BeanDefinitionRegistryPostProcessor {
 
     private final String namespace;
-    private final Map<String, Object> actions;
+    private final Map<String, String> actions;
 
-    public DefaultActionDefinitionFactory(Map<String, Object> actions) {
+    public DefaultActionDefinitionFactory(Map<String, String> actions) {
         this.namespace = null;
         this.actions = actions;
     }
 
-    public DefaultActionDefinitionFactory(String namespace, Map<String, Object> actions) {
+    public DefaultActionDefinitionFactory(String namespace, Map<String, String> actions) {
         this.namespace = namespace;
         this.actions = actions;
     }

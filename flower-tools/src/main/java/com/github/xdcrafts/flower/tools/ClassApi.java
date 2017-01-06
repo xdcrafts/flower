@@ -69,6 +69,22 @@ public final class ClassApi {
     }
 
     /**
+     * Calculates distance between from and to classes, counting from current.
+     */
+    private static int classDistance(Class<?> from, Class<?> to, int current) {
+        return to.isAssignableFrom(from)
+            ? to.equals(from) ? current : classDistance(from.getSuperclass(), to, current + 1)
+            : -1;
+    }
+
+    /**
+     * Calculates distance between from and to classes, counting from 0.
+     */
+    public static int classDistance(Class<?> from, Class<?> to) {
+        return classDistance(from, to, 0);
+    }
+
+    /**
      * Resolves the actual generic type arguments for a base class, as viewed from a subclass or implementation.
      *
      * @param <T> base type
