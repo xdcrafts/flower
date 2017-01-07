@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Converts specific method of object of some type to Function<Map, Map>.
+ * Converts specific method of object of some type to Function[Map, Map].
  * @param <T> type
  */
 public interface MethodConverter<T> {
@@ -51,7 +51,7 @@ public interface MethodConverter<T> {
     }
 
     /**
-     * Converts object of type T to Function<Map, Map>.
+     * Converts object of type T to Function[Map, Map].
      */
     Function<Map, Map> convert(T object);
 }
