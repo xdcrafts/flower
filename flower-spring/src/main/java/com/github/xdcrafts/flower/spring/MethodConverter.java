@@ -34,7 +34,7 @@ public interface MethodConverter<T> {
     Class<T> convertibleClass();
 
     /**
-     * Convertible method name;
+     * Convertible method name.
      */
     String methodName();
 
@@ -50,5 +50,8 @@ public interface MethodConverter<T> {
             : -1;
     }
 
+    /**
+     * Converts object of type T to Function<Map, Map>.
+     */
     Function<Map, Map> convert(T object);
 }
