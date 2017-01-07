@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * EmailRequestValidator to Function<Map, Map> converter.
+ * EmailRequestValidator to Function[Map, Map] converter.
  */
 public class EmailRequestValidatorMethodConverter implements MethodConverter<EmailRequestValidator> {
 
