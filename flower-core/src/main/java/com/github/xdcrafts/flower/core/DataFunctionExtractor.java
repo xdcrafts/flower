@@ -14,30 +14,18 @@
  * language governing permissions and limitations under the License.
  */
 
-package com.github.xdcrafts.flower.core.spring.example.email;
+package com.github.xdcrafts.flower.core;
 
-import com.github.xdcrafts.flower.core.MethodConverter;
-import com.github.xdcrafts.flower.tools.ClassApi;
-
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.function.Function;
 
 /**
- * EmailRequestValidator to Function[Map, Map] converter.
+ * Builds Function[Map, Map] from object's method with specified name.
  */
-public class EmailRequestValidatorMethodConverter implements MethodConverter<EmailRequestValidator> {
+public interface DataFunctionExtractor {
 
-    @Override
-    public Method method() {
-        return ClassApi.findMethod(EmailRequestValidator.class, "validate");
-    }
-
-    @Override
-    public Function<Map, Map> convert(EmailRequestValidator source) {
-        return ctx -> {
-            source.validate(ctx);
-            return ctx;
-        };
-    }
+    /**
+     * Builds Function[Map, Map] from object's method with specified name.
+     */
+    Function<Map, Map> apply(Object object, String methodName);
 }
