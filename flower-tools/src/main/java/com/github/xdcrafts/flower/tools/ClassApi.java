@@ -16,15 +16,18 @@
 
 package com.github.xdcrafts.flower.tools;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Utility methods for Class.
@@ -78,10 +81,42 @@ public final class ClassApi {
     }
 
     /**
-     * Calculates distance between from and to classes, counting from 0.
+     * Calculates distance between from and to classes.
      */
     public static int classDistance(Class<?> from, Class<?> to) {
         return classDistance(from, to, 0);
+    }
+
+    /**
+     * Calculates distance between from and to methods.
+     * @return -1 if this converter can not handle method value greater or equals then 0 otherwise
+     * (0 - highest priority)
+     */
+    public static int methodDistance(Method from, Method to) {
+        return from.getName().equals(to.getName())
+            && to.getDeclaringClass().isAssignableFrom(from.getDeclaringClass())
+            ? classDistance(from.getDeclaringClass(), to.getDeclaringClass())
+            : -1;
+    }
+
+    /**
+     * Finds method with name, throws exception if no method found or there are many of them.
+     */
+    public static Method findMethod(Class clazz, String methodName) {
+        final List<Method> methods = Arrays.stream(clazz.getDeclaredMethods())
+            .filter(m -> m.getName().equals(methodName))
+            .collect(Collectors.toList());
+        if (methods.isEmpty()) {
+            throw new IllegalArgumentException(clazz.getName() + "::" + methodName + " not found");
+        }
+        if (methods.size() > 1) {
+            throw new IllegalArgumentException(
+                clazz.getName() + "::" + methodName
+                + " more then one method found, can not decide which one to use. "
+                + methods
+            );
+        }
+        return methods.get(0);
     }
 
     /**
