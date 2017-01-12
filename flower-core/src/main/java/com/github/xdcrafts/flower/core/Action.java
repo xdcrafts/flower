@@ -16,7 +16,7 @@
 
 package com.github.xdcrafts.flower.core;
 
-import com.github.xdcrafts.flower.core.impl.DefaultAction;
+import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.tools.AsFunction;
 import com.github.xdcrafts.flower.tools.Named;
 

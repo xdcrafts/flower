@@ -17,10 +17,11 @@
 package com.github.xdcrafts.flower.core.impl.flows;
 
 import com.github.xdcrafts.flower.core.Action;
+import com.github.xdcrafts.flower.core.Core;
 import com.github.xdcrafts.flower.core.Middleware;
 import com.github.xdcrafts.flower.tools.AsFunction;
 import com.github.xdcrafts.flower.core.Flow;
-import com.github.xdcrafts.flower.core.impl.WithMiddlewareActionBase;
+import com.github.xdcrafts.flower.core.impl.actions.WithMiddlewareActionBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,17 +31,17 @@ import java.util.function.Function;
 /**
  * Basic and straightforward implementation of Flow.
  */
-public class BasicSyncFlow extends WithMiddlewareActionBase implements Flow {
+public class SyncFlow extends WithMiddlewareActionBase implements Flow {
 
     private final String name;
     private final List<Action> actions;
     private final Function<Map, Map> flowFunction;
 
-    public BasicSyncFlow(String name, List<Action> actions) {
+    public SyncFlow(String name, List<Action> actions) {
         this(name, actions, Collections.emptyList());
     }
 
-    public BasicSyncFlow(String name, List<Action> actions, List<Middleware> middleware) {
+    public SyncFlow(String name, List<Action> actions, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
         this.actions = Collections.unmodifiableList(actions);
@@ -48,9 +49,9 @@ public class BasicSyncFlow extends WithMiddlewareActionBase implements Flow {
             .stream()
             .map(AsFunction::asFunction)
             .reduce(Function.identity(), Function::andThen);
-        this.meta.put("name", name);
-        this.meta.put("class", getClass().getName());
-        this.meta.put("middleware", middleware);
+        this.meta.put(Core.ActionMeta.NAME, name);
+        this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
+        this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
     }
 
     @Override
@@ -70,7 +71,7 @@ public class BasicSyncFlow extends WithMiddlewareActionBase implements Flow {
 
     @Override
     public String toString() {
-        return "BasicSyncFlow{"
+        return "SyncFlow{"
                 + "name='" + this.name + '\''
                 + ", actions=" + this.actions
                 + '}';

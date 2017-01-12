@@ -14,7 +14,7 @@
  * language governing permissions and limitations under the License.
  */
 
-package com.github.xdcrafts.flower.core.impl;
+package com.github.xdcrafts.flower.core.impl.actions;
 
 import com.github.xdcrafts.flower.core.DataFunctionExtractor;
 import com.github.xdcrafts.flower.core.MethodConverter;

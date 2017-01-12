@@ -357,18 +357,12 @@ public final class MapApi {
             final Object lastKey = path[path.length - 1];
             Map<Object, Object> intermediateMap = map;
             for (Object key : pathToLastNode) {
-                final Object node = intermediateMap.get(key);
-                if (node != null) {
-                    final Optional<Map> nodeMapOption = ClassApi.cast(node, Map.class);
-                    if (nodeMapOption.isPresent()) {
-                        intermediateMap = nodeMapOption.get();
-                    } else {
-                        throw new IllegalAccessError("Node with key '" + key + "' is not a map!");
-                    }
+                final Object node = intermediateMap.computeIfAbsent(key, k -> ClassApi.newInstance(nodeClass));
+                final Optional<Map> nodeMapOption = ClassApi.cast(node, Map.class);
+                if (nodeMapOption.isPresent()) {
+                    intermediateMap = nodeMapOption.get();
                 } else {
-                    final Map<Object, Object> newNode = ClassApi.newInstance(nodeClass);
-                    intermediateMap.put(key, newNode);
-                    intermediateMap = newNode;
+                    throw new IllegalAccessError("Node with key '" + key + "' is not a map!");
                 }
             }
             intermediateMap.put(lastKey, value);

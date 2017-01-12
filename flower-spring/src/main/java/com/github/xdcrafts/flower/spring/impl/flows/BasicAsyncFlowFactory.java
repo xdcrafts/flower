@@ -17,7 +17,7 @@
 package com.github.xdcrafts.flower.spring.impl.flows;
 
 import com.github.xdcrafts.flower.core.Action;
-import com.github.xdcrafts.flower.core.impl.flows.BasicAsyncFlow;
+import com.github.xdcrafts.flower.core.impl.flows.AsyncFlow;
 import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * Spring factory bean for basic async actions that uses bean name as action name.
  */
-public class BasicAsyncFlowFactory extends AbstractActionFactoryBean<BasicAsyncFlow> {
+public class BasicAsyncFlowFactory extends AbstractActionFactoryBean<AsyncFlow> {
 
     private List<Action> actions;
     private ExecutorService executorService;
@@ -38,11 +38,11 @@ public class BasicAsyncFlowFactory extends AbstractActionFactoryBean<BasicAsyncF
 
     @Override
     public Class<?> getObjectType() {
-        return BasicAsyncFlow.class;
+        return AsyncFlow.class;
     }
 
     @Override
-    protected BasicAsyncFlow createInstance() throws Exception {
-        return new BasicAsyncFlow(getBeanName(), this.actions, this.executorService, getMiddleware(getBeanName()));
+    protected AsyncFlow createInstance() throws Exception {
+        return new AsyncFlow(getBeanName(), this.actions, this.executorService, getMiddleware(getBeanName()));
     }
 }

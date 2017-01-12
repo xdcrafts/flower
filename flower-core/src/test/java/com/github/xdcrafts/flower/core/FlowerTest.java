@@ -16,10 +16,12 @@
 
 package com.github.xdcrafts.flower.core;
 
-import com.github.xdcrafts.flower.core.impl.DefaultAction;
+import com.github.xdcrafts.flower.core.impl.actions.AwaitAction;
+import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
+import com.github.xdcrafts.flower.core.impl.flows.AsyncFlow;
 import com.github.xdcrafts.flower.core.impl.selectors.KeywordSelector;
 import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
-import com.github.xdcrafts.flower.core.impl.flows.BasicSyncFlow;
+import com.github.xdcrafts.flower.core.impl.flows.SyncFlow;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.github.xdcrafts.flower.tools.MapApi.get;
 import static com.github.xdcrafts.flower.tools.MapApi.getUnsafe;
@@ -47,8 +52,9 @@ public class FlowerTest {
     @Test
     public void test() {
         final Middleware counterMiddleware = Middleware.middleware("counterMiddleware", (map, function) -> ctx -> {
-            final int counter = get(ctx, Integer.class, "meta", "dummy").orElse(0);
-            return function.apply(assoc(ctx, "meta", "dummy", counter + 1));
+            final AtomicInteger counter = get(ctx, AtomicInteger.class, "meta", "dummy").orElse(new AtomicInteger());
+            counter.incrementAndGet();
+            return function.apply(assoc(ctx, "meta", "dummy", counter));
         });
         final Action firstAction = new DefaultAction(
             "firstAction",
@@ -57,7 +63,14 @@ public class FlowerTest {
         );
         final Action secondAction = new DefaultAction(
             "secondAction",
-            ctx -> assoc(ctx, "data", "second", true),
+            ctx -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return assoc(ctx, "data", "second", true);
+            },
             Collections.singletonList(counterMiddleware)
         );
         final Action thirdAction = new DefaultAction(
@@ -65,13 +78,20 @@ public class FlowerTest {
             ctx -> assoc(ctx, "data", "third", true),
             Collections.singletonList(counterMiddleware)
         );
-        final Flow simpleFlow = new BasicSyncFlow("simpleFlow", Arrays.asList(firstAction, secondAction));
-        final Flow complexFlow = new BasicSyncFlow("complexFlow", Arrays.asList(simpleFlow, thirdAction));
-        final Map result = complexFlow.apply(new HashMap());
+        final Action awaitAction = new AwaitAction("awaitAction", 110);
+        final Flow simpleAsyncFlow = new AsyncFlow(
+            "simpleFlow",
+            Arrays.asList(firstAction, secondAction), Executors.newSingleThreadExecutor()
+        );
+        final Flow complexFlow = new SyncFlow(
+            "complexFlow",
+            Arrays.asList(simpleAsyncFlow, awaitAction, thirdAction)
+        );
+        final Map result = complexFlow.apply(new ConcurrentHashMap());
         assertTrue(getUnsafe(result, Boolean.class, "data", "first"));
         assertTrue(getUnsafe(result, Boolean.class, "data", "second"));
         assertTrue(getUnsafe(result, Boolean.class, "data", "third"));
-        assertEquals(3, getUnsafe(result, Integer.class, "meta", "dummy").longValue());
+        assertEquals(3, getUnsafe(result, AtomicInteger.class, "meta", "dummy").longValue());
     }
 
     @Test

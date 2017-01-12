@@ -14,15 +14,33 @@
  * language governing permissions and limitations under the License.
  */
 
-package com.github.xdcrafts.flower.tools;
+package com.github.xdcrafts.flower.core;
 
 /**
- * Interface for entities that have a toggle switch: enabled/disabled.
+ * Core namespace.
  */
-public interface WithToggle {
+public final class Core {
 
     /**
-     * Returns toggle state.
+     * Private constructor.
      */
-    boolean isEnabled();
+    private Core() {
+        // Nothing
+    }
+
+    /**
+     * ActionMeta namespace.
+     */
+    public static final class ActionMeta {
+        public static final String NAME = "name";
+        public static final String TYPE = "type";
+        public static final String MIDDLEWARE = "middleware";
+    }
+
+    /**
+     * FlowMeta namespace.
+     */
+    public static final class FlowMeta {
+        public static final String EXPECTATION = "meta.flow.expectation";
+    }
 }
