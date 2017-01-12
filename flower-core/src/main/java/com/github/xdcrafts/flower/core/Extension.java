@@ -17,13 +17,14 @@
 package com.github.xdcrafts.flower.core;
 
 import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
+import com.github.xdcrafts.flower.tools.WithConfiguration;
 
 import java.util.Map;
 
 /**
  * Extension is an action with configuration that defines conditions when this selectAction should be chosen.
  */
-public interface Extension extends Action {
+public interface Extension extends Action, WithConfiguration {
 
     /**
      * Creates default implementation of selectAction.
@@ -40,10 +41,4 @@ public interface Extension extends Action {
      * Action that will process data.
      */
     Action action();
-
-    /**
-     * Conditions when this selectAction should be chosen.
-     * Contains data specific for concrete selector implementation.
-     */
-    Map configuration();
 }

@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutorService;
 
 import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotAssoc;
 import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGet;
+import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGetUnsafe;
 
 /**
  * Basic implementation of serial asynchronous flow.
@@ -37,23 +38,27 @@ import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGet;
 @SuppressWarnings("unchecked")
 public class AsyncFlow extends WithMiddlewareActionBase implements Flow {
 
+    public static final String EXECUTOR_SERVICE = "executorService";
+
     private final String name;
     private final List<Action> actions;
+    private final Map configuration;
     private final ExecutorService executorService;
 
     public AsyncFlow(
-        String name, List<Action> flow, ExecutorService executorService
+        String name, List<Action> flow, Map configuration
     ) {
-        this(name, flow, executorService, Collections.emptyList());
+        this(name, flow, configuration, Collections.emptyList());
     }
 
     public AsyncFlow(
-        String name, List<Action> actions, ExecutorService executorService, List<Middleware> middleware
+        String name, List<Action> actions, Map configuration, List<Middleware> middleware
     ) {
         super(middleware);
         this.name = name;
         this.actions = Collections.unmodifiableList(actions);
-        this.executorService = executorService;
+        this.configuration = configuration;
+        this.executorService = dotGetUnsafe(configuration, ExecutorService.class, EXECUTOR_SERVICE);
         this.meta.put(Core.ActionMeta.NAME, name);
         this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
         this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
@@ -85,7 +90,7 @@ public class AsyncFlow extends WithMiddlewareActionBase implements Flow {
         return "AsyncFlow{"
                 + "name='" + this.name + '\''
                 + ", actions=" + this.actions
-                + ", executorService=" + this.executorService
+                + ", configuration=" + this.configuration
                 + '}';
     }
 }

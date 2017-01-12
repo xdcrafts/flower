@@ -37,7 +37,9 @@ public class DefaultExtension extends WithMiddlewareExtensionBase {
         this(name, action, configuration, Collections.emptyList());
     }
 
-    public DefaultExtension(String name, Action action, Map configuration, List<Middleware> middleware) {
+    public DefaultExtension(
+        String name, Action action, Map configuration, List<Middleware> middleware
+    ) {
         super(middleware);
         this.name = name;
         this.action = action;
