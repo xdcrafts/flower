@@ -18,7 +18,7 @@ package com.github.xdcrafts.flower.core.impl.actions;
 
 import com.github.xdcrafts.flower.core.Action;
 import com.github.xdcrafts.flower.core.Core;
-import com.github.xdcrafts.flower.tools.MapApi;
+import com.github.xdcrafts.flower.tools.map.MapDotApi;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -52,7 +52,7 @@ public class AwaitAction implements Action {
 
     @Override
     public Map apply(Map map) {
-        return MapApi.DotNotation.dotGet(map, CompletableFuture.class, Core.FlowMeta.EXPECTATION)
+        return MapDotApi.dotGet(map, CompletableFuture.class, Core.FlowMeta.EXPECTATION)
             .map(f -> {
                 try {
                     return (Map) f.get(this.timeout, this.timeUnit);

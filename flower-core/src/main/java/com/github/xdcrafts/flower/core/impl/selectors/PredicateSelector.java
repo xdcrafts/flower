@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static com.github.xdcrafts.flower.tools.MapApi.get;
+import static com.github.xdcrafts.flower.tools.map.MapApi.get;
 
 /**
  * Implementation of Selector that selects Action based on predicates.

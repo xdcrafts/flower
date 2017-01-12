@@ -16,15 +16,16 @@
 
 package com.github.xdcrafts.flower.tools;
 
+import com.github.xdcrafts.flower.tools.map.MapDsl;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.xdcrafts.flower.tools.MapApi.contains;
-import static com.github.xdcrafts.flower.tools.MapApi.getNullableString;
-import static com.github.xdcrafts.flower.tools.MapApi.getUnsafe;
+import static com.github.xdcrafts.flower.tools.map.MapApi.contains;
+import static com.github.xdcrafts.flower.tools.map.MapApi.getNullableString;
+import static com.github.xdcrafts.flower.tools.map.MapApi.getUnsafe;
 
 /**
  * Simple MapDsl tests.
@@ -33,7 +34,7 @@ public class MapDslTest {
 
     @Test
     public void test() {
-        final Map map = MapDsl.Mutable.with(new HashMap())
+        final Map map = MapDsl.with(new HashMap())
             .assoc(":user", ":firstname", "John")
             .assoc(":user", ":surname", "Doe")
             .assoc(":user", ":gender", true)

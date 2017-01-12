@@ -34,10 +34,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.github.xdcrafts.flower.tools.MapApi.get;
-import static com.github.xdcrafts.flower.tools.MapApi.getUnsafe;
-import static com.github.xdcrafts.flower.tools.MapApi.Mutable.assoc;
-import static com.github.xdcrafts.flower.tools.MapDsl.Mutable.with;
+import static com.github.xdcrafts.flower.tools.map.MapApi.get;
+import static com.github.xdcrafts.flower.tools.map.MapApi.getUnsafe;
+import static com.github.xdcrafts.flower.tools.map.MapApi.assoc;
+import static com.github.xdcrafts.flower.tools.map.MapDsl.with;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

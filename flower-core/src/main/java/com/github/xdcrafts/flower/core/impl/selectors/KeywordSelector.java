@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.xdcrafts.flower.tools.MapApi.DotNotation.dotGetString;
+import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGetString;
 
 /**
  * Implementation of Selector that selects Action based on value of keyword in context.
