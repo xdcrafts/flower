@@ -60,7 +60,7 @@
 
     <!--                                  Flows start                                                            -->
 
-    <bean id="email.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
+    <bean id="email.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
         <constructor-arg name="actions">
             <list>
                 <ref bean="email.Validate"/>

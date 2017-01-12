@@ -26,12 +26,12 @@ import java.util.concurrent.ExecutorService;
 /**
  * Spring factory bean for basic async actions that uses bean name as action name.
  */
-public class BasicAsyncFlowFactory extends AbstractActionFactoryBean<AsyncFlow> {
+public class AsyncFlowFactory extends AbstractActionFactoryBean<AsyncFlow> {
 
     private List<Action> actions;
     private ExecutorService executorService;
 
-    public BasicAsyncFlowFactory(List<Action> actions, ExecutorService executorService) {
+    public AsyncFlowFactory(List<Action> actions, ExecutorService executorService) {
         this.actions = actions;
         this.executorService = executorService;
     }

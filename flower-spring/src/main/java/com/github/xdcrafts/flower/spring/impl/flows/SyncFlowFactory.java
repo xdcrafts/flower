@@ -25,11 +25,11 @@ import java.util.List;
 /**
  * Spring factory bean for basic sync actions that uses bean name as it's name.
  */
-public class BasicSyncFlowFactory extends AbstractActionFactoryBean<SyncFlow> {
+public class SyncFlowFactory extends AbstractActionFactoryBean<SyncFlow> {
 
     private List<Action> actions;
 
-    public BasicSyncFlowFactory(List<Action> actions) {
+    public SyncFlowFactory(List<Action> actions) {
         this.actions = actions;
     }
 

@@ -108,7 +108,7 @@
 
     <!--                                  Flows start                                                            -->
 
-    <bean id="mainFlow" class="com.github.xdcrafts.flower.spring.impl.flows.BasicSyncFlowFactory">
+    <bean id="mainFlow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
         <constructor-arg name="actions">
             <list>
                 <ref bean="authenticatorAction"/>
