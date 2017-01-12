@@ -19,7 +19,7 @@ package com.github.xdcrafts.flower.core.spring.example;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.xdcrafts.flower.tools.MapDsl.Mutable.with;
+import static com.github.xdcrafts.flower.tools.map.MapDsl.with;
 
 /**
  * Receiver.

@@ -18,7 +18,7 @@ package com.github.xdcrafts.flower.core.spring.example.sms;
 
 import java.util.Map;
 
-import static com.github.xdcrafts.flower.tools.MapApi.getString;
+import static com.github.xdcrafts.flower.tools.map.MapApi.getString;
 
 /**
  * Sms request validator.

@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import static com.github.xdcrafts.flower.tools.MapApi.DotNotation.dotGetUnsafe;
-import static com.github.xdcrafts.flower.tools.MapDsl.Mutable.with;
+import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGetUnsafe;
+import static com.github.xdcrafts.flower.tools.map.MapDsl.with;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

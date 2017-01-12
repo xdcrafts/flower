@@ -16,7 +16,7 @@
 
 package com.github.xdcrafts.flower.core.spring.example.email;
 
-import com.github.xdcrafts.flower.tools.MapApi;
+import com.github.xdcrafts.flower.tools.map.MapApi;
 
 import java.util.Map;
 

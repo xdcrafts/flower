@@ -28,8 +28,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
-import static com.github.xdcrafts.flower.tools.MapApi.DotNotation.Mutable.dotAssoc;
-import static com.github.xdcrafts.flower.tools.MapApi.DotNotation.dotGet;
+import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotAssoc;
+import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGet;
 
 /**
  * Basic implementation of serial asynchronous flow.
