@@ -16,7 +16,7 @@
 
 package com.github.xdcrafts.flower.core;
 
-import com.github.xdcrafts.flower.core.impl.DefaultMiddleware;
+import com.github.xdcrafts.flower.core.impl.middleware.DefaultMiddleware;
 import com.github.xdcrafts.flower.tools.Named;
 
 import java.util.Map;

@@ -17,9 +17,9 @@
 package com.github.xdcrafts.flower.spring.impl;
 
 import com.github.xdcrafts.flower.core.DataFunctionExtractor;
-import com.github.xdcrafts.flower.core.impl.DefaultAction;
+import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.core.MethodConverter;
-import com.github.xdcrafts.flower.core.impl.DefaultDataFunctionExtractor;
+import com.github.xdcrafts.flower.core.impl.actions.DefaultDataFunctionExtractor;
 import org.springframework.context.ApplicationContext;
 
 /**

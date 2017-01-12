@@ -18,7 +18,7 @@ package com.github.xdcrafts.flower.core.impl.selectors;
 
 import com.github.xdcrafts.flower.core.Middleware;
 import com.github.xdcrafts.flower.core.Selector;
-import com.github.xdcrafts.flower.core.impl.WithMiddlewareActionBase;
+import com.github.xdcrafts.flower.core.impl.actions.WithMiddlewareActionBase;
 
 import java.util.List;
 import java.util.Map;

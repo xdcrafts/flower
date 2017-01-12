@@ -17,6 +17,7 @@
 package com.github.xdcrafts.flower.core.impl.extensions;
 
 import com.github.xdcrafts.flower.core.Action;
+import com.github.xdcrafts.flower.core.Core;
 import com.github.xdcrafts.flower.core.Middleware;
 
 import java.util.Collections;
@@ -41,9 +42,9 @@ public class DefaultExtension extends WithMiddlewareExtensionBase {
         this.name = name;
         this.action = action;
         this.configuration = configuration;
-        this.meta.put("name", name);
-        this.meta.put("class", getClass().getName());
-        this.meta.put("middleware", middleware);
+        this.meta.put(Core.ActionMeta.NAME, name);
+        this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
+        this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
     }
 
     @Override

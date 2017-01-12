@@ -14,8 +14,9 @@
  * language governing permissions and limitations under the License.
  */
 
-package com.github.xdcrafts.flower.core.impl;
+package com.github.xdcrafts.flower.core.impl.actions;
 
+import com.github.xdcrafts.flower.core.Core;
 import com.github.xdcrafts.flower.core.Middleware;
 
 import java.util.Collections;
@@ -39,9 +40,9 @@ public class DefaultAction extends WithMiddlewareActionBase {
         super(middleware);
         this.actionBody = body;
         this.name = name;
-        this.meta.put("name", name);
-        this.meta.put("class", getClass().getName());
-        this.meta.put("middleware", middleware);
+        this.meta.put(Core.ActionMeta.NAME, name);
+        this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
+        this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
     }
 
     @Override

@@ -17,9 +17,10 @@
 package com.github.xdcrafts.flower.core.impl.flows;
 
 import com.github.xdcrafts.flower.core.Action;
+import com.github.xdcrafts.flower.core.Core;
 import com.github.xdcrafts.flower.core.Middleware;
 import com.github.xdcrafts.flower.core.Flow;
-import com.github.xdcrafts.flower.core.impl.WithMiddlewareActionBase;
+import com.github.xdcrafts.flower.core.impl.actions.WithMiddlewareActionBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,33 +28,35 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
-import static com.github.xdcrafts.flower.tools.MapApi.Mutable.assoc;
+import static com.github.xdcrafts.flower.tools.MapApi.DotNotation.Mutable.dotAssoc;
+import static com.github.xdcrafts.flower.tools.MapApi.DotNotation.dotGet;
 
 /**
- * Basic implementation of asynchronous flow.
+ * Basic implementation of serial asynchronous flow.
  */
-public class BasicAsyncFlow extends WithMiddlewareActionBase implements Flow {
+@SuppressWarnings("unchecked")
+public class AsyncFlow extends WithMiddlewareActionBase implements Flow {
 
     private final String name;
     private final List<Action> actions;
     private final ExecutorService executorService;
 
-    public BasicAsyncFlow(
+    public AsyncFlow(
         String name, List<Action> flow, ExecutorService executorService
     ) {
         this(name, flow, executorService, Collections.emptyList());
     }
 
-    public BasicAsyncFlow(
+    public AsyncFlow(
         String name, List<Action> actions, ExecutorService executorService, List<Middleware> middleware
     ) {
         super(middleware);
         this.name = name;
         this.actions = Collections.unmodifiableList(actions);
         this.executorService = executorService;
-        this.meta.put("name", name);
-        this.meta.put("class", getClass().getName());
-        this.meta.put("middleware", middleware);
+        this.meta.put(Core.ActionMeta.NAME, name);
+        this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
+        this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
     }
 
     @Override
@@ -68,17 +71,18 @@ public class BasicAsyncFlow extends WithMiddlewareActionBase implements Flow {
 
     @Override
     public Map act(Map context) {
-        final CompletableFuture<Map> completion = actions.stream().reduce(
-            CompletableFuture.completedFuture(context),
-            (future, action) -> future.thenApplyAsync(action, this.executorService),
-            (left, right) -> right
-        );
-        return assoc(context, "meta", "completion", completion);
+        CompletableFuture<Map> expectation = dotGet(
+            context, CompletableFuture.class, Core.FlowMeta.EXPECTATION
+        ).orElse(CompletableFuture.completedFuture(context));
+        for (Action action : this.actions) {
+            expectation = expectation.thenApplyAsync(action, this.executorService);
+        }
+        return dotAssoc(context, Core.FlowMeta.EXPECTATION, expectation);
     }
 
     @Override
     public String toString() {
-        return "BasicAsyncFlow{"
+        return "AsyncFlow{"
                 + "name='" + this.name + '\''
                 + ", actions=" + this.actions
                 + ", executorService=" + this.executorService
