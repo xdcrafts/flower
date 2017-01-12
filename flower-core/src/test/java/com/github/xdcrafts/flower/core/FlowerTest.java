@@ -81,7 +81,10 @@ public class FlowerTest {
         final Action awaitAction = new AwaitAction("awaitAction", 110);
         final Flow simpleAsyncFlow = new AsyncFlow(
             "simpleFlow",
-            Arrays.asList(firstAction, secondAction), Executors.newSingleThreadExecutor()
+            Arrays.asList(firstAction, secondAction),
+            with(new HashMap<String, Object>())
+                .assoc(AsyncFlow.EXECUTOR_SERVICE, Executors.newSingleThreadExecutor())
+                .value()
         );
         final Flow complexFlow = new SyncFlow(
             "complexFlow",
