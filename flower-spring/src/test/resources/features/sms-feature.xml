@@ -16,31 +16,27 @@
 
     <!--                                  Simple beans end                                                       -->
 
-    <!--                                  Actions start                                                          -->
-
-    <bean class="com.github.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
+    <bean id="sms.FlowMiddleware" class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
+        <constructor-arg name="shared" value="false"/>
         <constructor-arg name="namespace" value="sms"/>
-        <constructor-arg name="actions">
+        <constructor-arg name="definition">
             <map>
-                <entry key="Validate" value="sms.RequestValidator::validate"/>
-                <entry key="Authorize" value="sms.Authorizer::authorize"/>
-                <entry key="Send" value="sms.Sender::send"/>
+                <entry key="RequestValidator::validate, Authorizer::authorize, Sender::send" value="loggingMiddleware"/>
             </map>
         </constructor-arg>
     </bean>
-
-    <!--                                  Actions end                                                            -->
 
     <!--                                  Flows start                                                            -->
 
     <bean id="sms.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
         <constructor-arg name="actions">
             <list>
-                <ref bean="sms.Validate"/>
-                <ref bean="sms.Authorize"/>
-                <ref bean="sms.Send"/>
+                <value>sms.RequestValidator::validate</value>
+                <value>sms.Authorizer::authorize</value>
+                <value>sms.Sender::send</value>
             </list>
         </constructor-arg>
+        <property name="middleware" ref="sms.FlowMiddleware"/>
     </bean>
 
     <!--                                  Flows end                                                              -->

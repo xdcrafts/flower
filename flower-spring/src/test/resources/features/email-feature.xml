@@ -35,6 +35,7 @@
     <!--                                  Simple beans end                                                       -->
 
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
+        <constructor-arg name="shared" value="true"/>
         <constructor-arg name="namespace" value="email"/>
         <constructor-arg name="definition">
             <map>

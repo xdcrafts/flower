@@ -16,6 +16,9 @@
 
 package com.github.xdcrafts.flower.spring.impl;
 
+import com.github.xdcrafts.flower.core.DataFunctionExtractor;
+import com.github.xdcrafts.flower.core.MethodConverter;
+import com.github.xdcrafts.flower.core.impl.actions.DefaultDataFunctionExtractor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import com.github.xdcrafts.flower.core.Middleware;
@@ -23,6 +26,7 @@ import com.github.xdcrafts.flower.core.Middleware;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -33,15 +37,42 @@ public abstract class AbstractActionFactoryBean<T>
     extends AbstractNameAwareFactoryBean<T>
     implements ApplicationContextAware {
 
+    private static final String SPLITTER = "::";
+
     private ApplicationContext applicationContext;
+    private DataFunctionExtractor dataFunctionExtractor;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+        this.dataFunctionExtractor = new DefaultDataFunctionExtractor(
+            applicationContext
+                .getBeansOfType(MethodConverter.class, true, false).values()
+        );
     }
 
     public ApplicationContext getApplicationContext() {
         return applicationContext;
+    }
+
+    protected Function<Map, Map> resolveDataFunction(String definition) {
+        final String[] subjectAndMethod = definition.split(SPLITTER);
+        if (subjectAndMethod.length != 2) {
+            throw new IllegalArgumentException(
+                "Invalid action declaration: <class-or-bean-name>::<method-name> expected."
+            );
+        }
+        final String subject = subjectAndMethod[0];
+        final String method = subjectAndMethod[1];
+        final Object classOrBean;
+        try {
+            classOrBean = this.getApplicationContext().containsBean(subject)
+                ? this.getApplicationContext().getBean(subject)
+                : Class.forName(subject);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException(e);
+        }
+        return dataFunctionExtractor.apply(classOrBean, method);
     }
 
     /**
@@ -52,6 +83,7 @@ public abstract class AbstractActionFactoryBean<T>
             .getBeansOfType(MiddlewareDefinition.class, true, false)
             .values()
             .stream()
+            .filter(MiddlewareDefinition::isShared)
             .flatMap(d -> d.getDefinition().entrySet().stream())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             .get(name);

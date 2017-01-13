@@ -80,6 +80,7 @@
 
 
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
+        <constructor-arg name="shared" value="true"/>
         <constructor-arg name="definition">
             <map>
                 <entry key="selector" value="loggingMiddleware"/>
