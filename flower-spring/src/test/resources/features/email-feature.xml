@@ -34,6 +34,8 @@
 
     <!--                                  Simple beans end                                                       -->
 
+    <!--                                  Middleware start                                                       -->
+
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
         <constructor-arg name="shared" value="true"/>
         <constructor-arg name="namespace" value="email"/>
@@ -43,6 +45,8 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <!--                                  Middleware end                                                         -->
 
     <!--                                  Actions start                                                          -->
 

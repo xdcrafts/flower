@@ -16,6 +16,8 @@
 
     <!--                                  Simple beans end                                                       -->
 
+    <!--                                  Middleware start                                                       -->
+
     <bean id="sms.FlowMiddleware" class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
         <constructor-arg name="shared" value="false"/>
         <constructor-arg name="namespace" value="sms"/>
@@ -25,6 +27,8 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <!--                                  Middleware end                                                         -->
 
     <!--                                  Flows start                                                            -->
 
