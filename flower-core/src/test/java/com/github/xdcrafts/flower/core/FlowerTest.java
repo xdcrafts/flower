@@ -17,6 +17,7 @@
 package com.github.xdcrafts.flower.core;
 
 import com.github.xdcrafts.flower.core.impl.DefaultActor;
+import com.github.xdcrafts.flower.core.impl.DefaultFeature;
 import com.github.xdcrafts.flower.core.impl.actions.AwaitAction;
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.core.impl.flows.AsyncFlow;
@@ -46,6 +47,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Simple tests.
  */
+@SuppressWarnings("unchecked")
 public class FlowerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FlowerTest.class);
@@ -135,8 +137,13 @@ public class FlowerTest {
             secondAction,
             with(new HashMap()).assoc(KeywordSelector.ConfigurationKeys.KEYWORD_VALUE, "second").value()
         );
-        final Selector keywordSelector = new KeywordSelector(
-            "aSelector", "data.selectAction", Arrays.asList(firstExtension, secondExtension)
+        final Selector keywordSelector = new KeywordSelector("aSelector", "data.selectAction");
+        new DefaultFeature(
+            "feature",
+            with(new HashMap())
+                .assoc(firstExtension, keywordSelector)
+                .assoc(secondExtension, keywordSelector)
+                .value()
         );
         final Map firstResult = keywordSelector.apply(
             with(new HashMap()).assoc("data", "selectAction", "first").value()

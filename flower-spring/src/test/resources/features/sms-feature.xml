@@ -52,12 +52,19 @@
         <constructor-arg name="configuration">
             <map>
                 <entry key="keyword-value" value="sms"/>
-                <entry key="selector" value="selector"/>
             </map>
         </constructor-arg>
     </bean>
 
     <!--                                  Extensions end                                                         -->
+
+    <bean id="sms.Feature" class="com.github.xdcrafts.flower.spring.impl.DefaultFeatureFactory">
+        <constructor-arg name="extensions">
+            <map>
+                <entry key-ref="sms.Extension" value-ref="selector"/>
+            </map>
+        </constructor-arg>
+    </bean>
 
 </beans>
 

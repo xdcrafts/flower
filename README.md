@@ -26,6 +26,7 @@ Data-driven workflows with Java.
 * **Flow** - sequence of **actions** and a way of their execution and composition. Implements **action**.
 * **Selector** - extension point, that is responsible for based on **context** data selection of concrete extension implementation. Implements **action**.
 * **Extension** - **action** and configuration map, that helps **selector** implementation to match this **extension**. Implements **action**.
+* **Feature** - responsible for registration of **extensions** in **selectors**, stores **extension** to **selector** mapping.
 * **Actor** - performs some **action** upon **context** with provided data and then deduces result of concrete type ***T***. 
 * **Middleware** - named ***BiFunction<Map<String, Object>, Function<Map, Map>, Function<Map, Map>>***,
 where second argument is **data-function** to modify, first argument is any kind of meta-data about that **data function**

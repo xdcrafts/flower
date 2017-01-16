@@ -16,7 +16,7 @@
 
 package com.github.xdcrafts.flower.core;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -27,10 +27,15 @@ public interface Selector extends Action {
     /**
      * Returns extensions registered in this selector.
      */
-    List<Extension> extensions();
+    Collection<Extension> extensions();
 
     /**
      * Makes decision about which action should proceed with processing of proposed context.
      */
     Action selectAction(Map context);
+
+    /**
+     * Register new extension.
+     */
+    void register(Extension extension);
 }

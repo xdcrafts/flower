@@ -14,23 +14,19 @@
  * language governing permissions and limitations under the License.
  */
 
-package com.github.xdcrafts.flower.spring.impl.selectors;
+package com.github.xdcrafts.flower.core;
 
-import com.github.xdcrafts.flower.core.impl.selectors.PredicateSelector;
-import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
+import com.github.xdcrafts.flower.tools.Named;
+
+import java.util.Map;
 
 /**
- * PredicateSelector factory bean.
+ * Feature is a collection of extensions mapped to selectors.
  */
-public class PredicateSelectorFactory extends AbstractActionFactoryBean<PredicateSelector> {
+public interface Feature extends Named {
 
-    @Override
-    public Class<?> getObjectType() {
-        return PredicateSelector.class;
-    }
-
-    @Override
-    protected PredicateSelector createInstance() throws Exception {
-        return new PredicateSelector(getBeanName(), getMiddleware(getBeanName()));
-    }
+    /**
+     * Extensions mapped to selectors.
+     */
+    Map<Extension, Selector> extensions();
 }

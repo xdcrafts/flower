@@ -17,11 +17,12 @@
 package com.github.xdcrafts.flower.spring.impl.selectors;
 
 import com.github.xdcrafts.flower.core.impl.selectors.KeywordSelector;
+import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
 
 /**
  * KeywordSelector factory bean.
  */
-public class KeywordSelectorFactory extends AbstractSelectorFactoryBean<KeywordSelector> {
+public class KeywordSelectorFactory extends AbstractActionFactoryBean<KeywordSelector> {
 
     private String keyword;
 
@@ -37,7 +38,7 @@ public class KeywordSelectorFactory extends AbstractSelectorFactoryBean<KeywordS
     @Override
     protected KeywordSelector createInstance() throws Exception {
         return new KeywordSelector(
-            getBeanName(), this.keyword, fetchExtensions(getBeanName()), getMiddleware(getBeanName())
+            getBeanName(), this.keyword, getMiddleware(getBeanName())
         );
     }
 }

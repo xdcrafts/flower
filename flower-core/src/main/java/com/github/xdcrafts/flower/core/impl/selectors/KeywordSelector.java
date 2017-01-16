@@ -21,10 +21,11 @@ import com.github.xdcrafts.flower.core.Extension;
 import com.github.xdcrafts.flower.core.Action;
 import com.github.xdcrafts.flower.core.Middleware;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGetString;
 
@@ -42,27 +43,17 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
 
     private final String name;
     private final String keyword;
-    private final List<Extension> extensions;
-    private final Map<String, Action> actionsMapping;
+    private final Map<String, Extension> extensions;
 
-    public KeywordSelector(String name, String keyword, List<Extension> extensions) {
-        this(name, keyword, extensions, Collections.emptyList());
+    public KeywordSelector(String name, String keyword) {
+        this(name, keyword, Collections.emptyList());
     }
 
-    public KeywordSelector(String name, String keyword, List<Extension> extensions, List<Middleware> middleware) {
+    public KeywordSelector(String name, String keyword, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
         this.keyword = keyword;
-        this.extensions = extensions;
-        this.actionsMapping = new HashMap<>();
-        for (Extension extension : extensions) {
-            final Map configuration = extension.configuration();
-            final String keywordValue = dotGetString(configuration, ConfigurationKeys.KEYWORD_VALUE)
-                .orElseThrow(() -> new IllegalArgumentException(
-                    extension + ": '" + ConfigurationKeys.KEYWORD_VALUE + "' key required."
-                ));
-            actionsMapping.put(keywordValue, extension.action());
-        }
+        this.extensions = new ConcurrentHashMap<>();
         this.meta.put(Core.ActionMeta.NAME, name);
         this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
         this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
@@ -74,8 +65,8 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
     }
 
     @Override
-    public List<Extension> extensions() {
-        return this.extensions;
+    public Collection<Extension> extensions() {
+        return this.extensions.values();
     }
 
     @Override
@@ -84,7 +75,7 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
             () -> new IllegalArgumentException(
                 "Unable to selectAction request, '" + this.keyword + "' key required"
             ));
-        final Action action = this.actionsMapping.get(keywordValue);
+        final Action action = this.extensions.get(keywordValue);
         if (action == null) {
             throw new IllegalArgumentException(
                 "Unable to selectAction request, '" + keywordValue + "' is unknown keyword value."
@@ -94,12 +85,25 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
     }
 
     @Override
+    public void register(Extension extension) {
+        final Map configuration = extension.configuration();
+        final String keywordValue = dotGetString(configuration, ConfigurationKeys.KEYWORD_VALUE)
+            .orElseThrow(() -> new IllegalArgumentException(
+                extension + ": '" + ConfigurationKeys.KEYWORD_VALUE + "' key required."
+            ));
+        if (this.extensions.containsKey(keywordValue)) {
+            throw new IllegalArgumentException("'" + keywordValue + "' already registered!");
+        }
+        this.extensions.put(keywordValue, extension);
+    }
+
+    @Override
     public String toString() {
         return "KeywordSelector{"
                 + "name='" + this.name + '\''
                 + ", keyword=" + this.keyword
                 + ", extensions=" + extensions
-                + ", actionsMapping=" + actionsMapping
+                + ", extensions=" + extensions
                 + '}';
     }
 }

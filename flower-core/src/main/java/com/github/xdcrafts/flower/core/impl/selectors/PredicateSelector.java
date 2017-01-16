@@ -21,11 +21,11 @@ import com.github.xdcrafts.flower.core.Core;
 import com.github.xdcrafts.flower.core.Extension;
 import com.github.xdcrafts.flower.core.Middleware;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import static com.github.xdcrafts.flower.tools.map.MapApi.get;
@@ -44,30 +44,16 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
     }
 
     private final String name;
-    private final List<Extension> extensions;
-    private final List<Predicate<Map>> predicates;
-    private final Map<Predicate, Action> actionsMapping;
+    private final Map<Predicate, Extension> extensions;
 
-    public PredicateSelector(String name, List<Extension> extensions) {
-        this(name, extensions, Collections.emptyList());
+    public PredicateSelector(String name) {
+        this(name, Collections.emptyList());
     }
 
-    public PredicateSelector(String name, List<Extension> extensions, List<Middleware> middleware) {
+    public PredicateSelector(String name, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
-        this.extensions = extensions;
-        this.actionsMapping = new HashMap<>();
-        this.predicates = new ArrayList<>();
-        for (Extension extension : extensions) {
-            final Map configuration = extension.configuration();
-            final Predicate predicate =
-                get(configuration, Predicate.class, ConfigurationKeys.PREDICATE)
-                .orElseThrow(() -> new IllegalArgumentException(
-                    extension + ": '" + ConfigurationKeys.PREDICATE + "' key required."
-                ));
-            predicates.add(predicate);
-            actionsMapping.put(predicate, extension.action());
-        }
+        this.extensions = new ConcurrentHashMap<>();
         this.meta.put(Core.ActionMeta.NAME, name);
         this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
         this.meta.put(Core.ActionMeta.MIDDLEWARE, middleware);
@@ -79,18 +65,32 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
     }
 
     @Override
-    public List<Extension> extensions() {
-        return this.extensions;
+    public Collection<Extension> extensions() {
+        return this.extensions.values();
     }
 
     @Override
     public Action selectAction(Map context) {
-        for (Predicate<Map> predicate: this.predicates) {
+        for (Predicate<Map> predicate: this.extensions.keySet()) {
             if (predicate.test(context)) {
-                return this.actionsMapping.get(predicate);
+                return this.extensions.get(predicate);
             }
         }
         throw new IllegalArgumentException("Unable to selectAction request, no suitable action found.");
+    }
+
+    @Override
+    public void register(Extension extension) {
+        final Map configuration = extension.configuration();
+        final Predicate predicate =
+            get(configuration, Predicate.class, ConfigurationKeys.PREDICATE)
+            .orElseThrow(() -> new IllegalArgumentException(
+                extension + ": '" + ConfigurationKeys.PREDICATE + "' key required."
+            ));
+        if (this.extensions.containsKey(predicate)) {
+            throw new IllegalArgumentException(predicate + " already registered!");
+        }
+        this.extensions.put(predicate, extension);
     }
 
     @Override
@@ -98,8 +98,7 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
         return "PredicateSelector{"
                 + "name='" + this.name + '\''
                 + ", extensions=" + extensions
-                + ", predicates=" + predicates
-                + ", actionsMapping=" + actionsMapping
+                + ", extensions=" + extensions
                 + '}';
     }
 }
