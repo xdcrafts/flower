@@ -38,20 +38,26 @@ public class MiddlewareDefinition implements ApplicationContextAware {
         return Arrays.stream(string.split(SPLITTER_REGEX)).map(String::trim).collect(Collectors.toList());
     }
 
+    private final boolean shared;
     private final String namespace;
     private final Map<String, String> rawDefinition;
     private Map<String, List<Middleware>> definition;
 
-    public MiddlewareDefinition(Map<String, String> definition) {
-        this(null, definition);
+    public MiddlewareDefinition(boolean shared, Map<String, String> definition) {
+        this(shared, null, definition);
     }
 
-    public MiddlewareDefinition(String namespace, Map<String, String> definition) {
+    public MiddlewareDefinition(boolean shared, String namespace, Map<String, String> definition) {
         if (definition == null) {
             throw new IllegalArgumentException("'definition' can not be null.");
         }
+        this.shared = shared;
         this.rawDefinition = definition;
         this.namespace = namespace;
+    }
+
+    public boolean isShared() {
+        return shared;
     }
 
     public Map<String, List<Middleware>> getDefinition() {
@@ -87,6 +93,7 @@ public class MiddlewareDefinition implements ApplicationContextAware {
                 + "namespace='" + namespace + '\''
                 + ", rawDefinition=" + rawDefinition
                 + ", definition=" + definition
+                + ", shared=" + shared
                 + '}';
     }
 }

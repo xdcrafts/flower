@@ -16,11 +16,7 @@
 
 package com.github.xdcrafts.flower.spring.impl;
 
-import com.github.xdcrafts.flower.core.DataFunctionExtractor;
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
-import com.github.xdcrafts.flower.core.MethodConverter;
-import com.github.xdcrafts.flower.core.impl.actions.DefaultDataFunctionExtractor;
-import org.springframework.context.ApplicationContext;
 
 /**
  * Spring factory bean for default action that uses bean name as action name.
@@ -29,31 +25,10 @@ import org.springframework.context.ApplicationContext;
 public class DefaultActionFactory
     extends AbstractActionFactoryBean<DefaultAction> {
 
-    private static final String SPLITTER = "::";
-
-    private final String subject;
     private final String method;
-    private DataFunctionExtractor dataFunctionExtractor;
 
     public DefaultActionFactory(String method) {
-        final String[] subjectAndMethod = method.split(SPLITTER);
-        if (subjectAndMethod.length != 2) {
-            throw new IllegalArgumentException(
-                "Invalid action declaration. Either "
-                + "<qualified-class-name>::<method-name> or <bean-name>::<method-name> expected,"
-            );
-        }
-        this.subject = subjectAndMethod[0];
-        this.method = subjectAndMethod[1];
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        super.setApplicationContext(applicationContext);
-        this.dataFunctionExtractor = new DefaultDataFunctionExtractor(
-            applicationContext
-                .getBeansOfType(MethodConverter.class, true, false).values()
-        );
+        this.method = method;
     }
 
     @Override
@@ -63,12 +38,9 @@ public class DefaultActionFactory
 
     @Override
     protected DefaultAction createInstance() throws Exception {
-        final Object classOrBean = this.getApplicationContext().containsBean(this.subject)
-            ? this.getApplicationContext().getBean(this.subject)
-            : Class.forName(this.subject);
         return new DefaultAction(
             getBeanName(),
-            this.dataFunctionExtractor.apply(classOrBean, this.method),
+            resolveDataFunction(this.method),
             getMiddleware(getBeanName())
         );
     }

@@ -16,20 +16,18 @@
 
 package com.github.xdcrafts.flower.spring.impl.flows;
 
-import com.github.xdcrafts.flower.core.Action;
 import com.github.xdcrafts.flower.core.impl.flows.SyncFlow;
-import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
 
 import java.util.List;
 
 /**
  * Spring factory bean for basic sync actions that uses bean name as it's name.
  */
-public class SyncFlowFactory extends AbstractActionFactoryBean<SyncFlow> {
+public class SyncFlowFactory extends AbstractFlowFactoryBean<SyncFlow> {
 
-    private List<Action> actions;
+    private List<Object> actions;
 
-    public SyncFlowFactory(List<Action> actions) {
+    public SyncFlowFactory(List<Object> actions) {
         this.actions = actions;
     }
 
@@ -40,6 +38,6 @@ public class SyncFlowFactory extends AbstractActionFactoryBean<SyncFlow> {
 
     @Override
     protected SyncFlow createInstance() throws Exception {
-        return new SyncFlow(getBeanName(), this.actions, getMiddleware(getBeanName()));
+        return new SyncFlow(getBeanName(), toActions(this.actions), getMiddleware(getBeanName()));
     }
 }
