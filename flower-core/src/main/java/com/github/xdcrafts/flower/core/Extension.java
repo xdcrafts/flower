@@ -33,7 +33,7 @@ public interface Extension extends Action, WithConfiguration {
      * @param configuration extension's configuration
      * @return default selectAction
      */
-    static Extension route(String name, Action action, Map configuration) {
+    static Extension extension(String name, Action action, Map configuration) {
         return new DefaultExtension(name, action, configuration);
     }
 
