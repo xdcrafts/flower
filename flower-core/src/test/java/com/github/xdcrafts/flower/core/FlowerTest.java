@@ -16,6 +16,7 @@
 
 package com.github.xdcrafts.flower.core;
 
+import com.github.xdcrafts.flower.core.impl.DefaultActor;
 import com.github.xdcrafts.flower.core.impl.actions.AwaitAction;
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.core.impl.flows.AsyncFlow;
@@ -48,6 +49,21 @@ import static org.junit.Assert.assertTrue;
 public class FlowerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FlowerTest.class);
+
+    private static final class ConclusionValue {
+        private final boolean success;
+        private final int steps;
+        ConclusionValue(boolean success, int steps) {
+            this.success = success;
+            this.steps = steps;
+        }
+        boolean isSuccess() {
+            return success;
+        }
+        int getSteps() {
+            return steps;
+        }
+    }
 
     @Test
     public void test() {
@@ -90,11 +106,19 @@ public class FlowerTest {
             "complexFlow",
             Arrays.asList(simpleAsyncFlow, awaitAction, thirdAction)
         );
-        final Map result = complexFlow.apply(new ConcurrentHashMap());
-        assertTrue(getUnsafe(result, Boolean.class, "data", "first"));
-        assertTrue(getUnsafe(result, Boolean.class, "data", "second"));
-        assertTrue(getUnsafe(result, Boolean.class, "data", "third"));
-        assertEquals(3, getUnsafe(result, AtomicInteger.class, "meta", "dummy").longValue());
+        final Actor<ConclusionValue> actor = new DefaultActor<>(
+            ConcurrentHashMap::new,
+            complexFlow,
+            ctx -> new ConclusionValue(
+                getUnsafe(ctx, Boolean.class, "data", "first")
+                && getUnsafe(ctx, Boolean.class, "data", "second")
+                && getUnsafe(ctx, Boolean.class, "data", "third"),
+                getUnsafe(ctx, AtomicInteger.class, "meta", "dummy").intValue()
+            )
+        );
+        final ConclusionValue result = actor.apply();
+        assertTrue(result.isSuccess());
+        assertEquals(3, result.getSteps());
     }
 
     @Test
