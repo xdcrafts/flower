@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.github.xdcrafts.flower.tools.map.MapApi.get;
 
@@ -70,13 +71,17 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
     }
 
     @Override
-    public Action selectAction(Map context) {
-        for (Predicate<Map> predicate: this.extensions.keySet()) {
-            if (predicate.test(context)) {
-                return this.extensions.get(predicate);
-            }
+    public List<Action> selectAction(Map context) {
+        final List<Action> actions = this.extensions
+            .entrySet()
+            .stream()
+            .filter(e -> e.getKey().test(context))
+            .map(Map.Entry::getValue)
+            .collect(Collectors.toList());
+        if (actions.isEmpty()) {
+            throw new IllegalArgumentException("Unable to selectAction request, no suitable action found.");
         }
-        throw new IllegalArgumentException("Unable to selectAction request, no suitable action found.");
+        return actions;
     }
 
     @Override

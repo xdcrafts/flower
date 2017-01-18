@@ -25,13 +25,17 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
+import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGet;
 import static com.github.xdcrafts.flower.tools.map.MapDotApi.dotGetString;
 
 /**
  * Implementation of Selector that selects Action based on value of keyword in context.
  */
+@SuppressWarnings("unchecked")
 public class KeywordSelector extends WithMiddlewareSelectorBase {
 
     /**
@@ -70,18 +74,31 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
     }
 
     @Override
-    public Action selectAction(Map context) {
-        final String keywordValue = dotGetString(context, this.keyword).orElseThrow(
+    public List<Action> selectAction(Map context) {
+        final Object keywordValue = dotGet(context, this.keyword).orElseThrow(
             () -> new IllegalArgumentException(
                 "Unable to selectAction request, '" + this.keyword + "' key required"
             ));
-        final Action action = this.extensions.get(keywordValue);
-        if (action == null) {
+        final Collection<String> keywordValues;
+        if (keywordValue instanceof String) {
+            keywordValues = Collections.singletonList((String) keywordValue);
+        } else if (keywordValue instanceof Collection) {
+            keywordValues = (Collection<String>) keywordValue;
+        } else {
+            throw new IllegalArgumentException("'" + this.keyword + "' should be a String or Collection<String>.");
+        }
+        final List<Action> actions = keywordValues
+            .stream()
+            .map(value -> Optional.ofNullable(this.extensions.get(value)))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.toList());
+        if (actions.isEmpty()) {
             throw new IllegalArgumentException(
                 "Unable to selectAction request, '" + keywordValue + "' is unknown keyword value."
             );
         }
-        return action;
+        return actions;
     }
 
     @Override

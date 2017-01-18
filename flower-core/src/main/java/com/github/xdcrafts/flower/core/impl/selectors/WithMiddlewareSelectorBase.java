@@ -22,6 +22,7 @@ import com.github.xdcrafts.flower.core.impl.actions.WithMiddlewareActionBase;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Abstract class as a base for any Selector implementation.
@@ -34,6 +35,10 @@ public abstract class WithMiddlewareSelectorBase extends WithMiddlewareActionBas
 
     @Override
     public Map act(Map ctx) {
-        return selectAction(ctx).apply(ctx);
+        return selectAction(ctx)
+            .stream()
+            .map(a -> (Function<Map, Map>) a)
+            .reduce(Function.identity(), Function::andThen)
+            .apply(ctx);
     }
 }
