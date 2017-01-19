@@ -77,7 +77,7 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
     public List<Action> selectAction(Map context) {
         final Object keywordValue = dotGet(context, this.keyword).orElseThrow(
             () -> new IllegalArgumentException(
-                "Unable to selectAction request, '" + this.keyword + "' key required"
+                "Unable to select action, '" + this.keyword + "' key required"
             ));
         final Collection<String> keywordValues;
         if (keywordValue instanceof String) {
@@ -95,7 +95,7 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
             .collect(Collectors.toList());
         if (actions.isEmpty()) {
             throw new IllegalArgumentException(
-                "Unable to selectAction request, '" + keywordValue + "' is unknown keyword value."
+                "Unable to select action, '" + keywordValue + "' is unknown keyword value."
             );
         }
         return actions;

@@ -79,7 +79,7 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
             .map(Map.Entry::getValue)
             .collect(Collectors.toList());
         if (actions.isEmpty()) {
-            throw new IllegalArgumentException("Unable to selectAction request, no suitable action found.");
+            throw new IllegalArgumentException("Unable to select action, no suitable action found.");
         }
         return actions;
     }
