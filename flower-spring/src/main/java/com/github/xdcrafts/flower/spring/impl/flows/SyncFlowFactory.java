@@ -19,6 +19,7 @@ package com.github.xdcrafts.flower.spring.impl.flows;
 import com.github.xdcrafts.flower.core.impl.flows.SyncFlow;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Spring factory bean for basic sync actions that uses bean name as it's name.
@@ -38,6 +39,10 @@ public class SyncFlowFactory extends AbstractFlowFactoryBean<SyncFlow> {
 
     @Override
     protected SyncFlow createInstance() throws Exception {
-        return new SyncFlow(getBeanName(), toActions(this.actions), getMiddleware(getBeanName()));
+        return new SyncFlow(
+            getBeanName(),
+            this.actions.stream().map(this::toAction).collect(Collectors.toList()),
+            getMiddleware(getBeanName())
+        );
     }
 }

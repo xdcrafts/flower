@@ -36,8 +36,6 @@ public abstract class AbstractFlowFactoryBean<T> extends AbstractActionFactoryBe
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    private static final String MIDDLEWARE = "middleware";
-
     private MiddlewareDefinition middleware;
 
     public void setMiddleware(MiddlewareDefinition middleware) {
@@ -45,31 +43,29 @@ public abstract class AbstractFlowFactoryBean<T> extends AbstractActionFactoryBe
     }
 
     /**
-     * Convert list of supplied objects to list of actions if possible.
+     * Convert supplied object to of action if possible.
      */
-    protected List<Action> toActions(List<Object> items) {
-        return items.stream().map(item -> {
-            if (item instanceof Action) {
-                return (Action) item;
-            } else if (item instanceof String) {
-                final String definition = (String) item;
-                final List<Middleware> definedMiddleware = Optional.ofNullable(middleware)
-                    .map(m -> m
-                        .getDefinition()
-                        .getOrDefault(definition, Collections.emptyList())
-                    )
-                    .orElse(Collections.emptyList());
-                return new DefaultAction(
-                    definition + "@" + RANDOM.nextInt(),
-                    resolveDataFunction((String) item),
-                    definedMiddleware
-                );
-            } else {
-                throw new IllegalArgumentException(
-                    "Can not convert " + item + " to Action. "
-                    + "Action or '<bean-or-class-name>::<method-name>' string expected."
-                );
-            }
-        }).collect(Collectors.toList());
+    protected Action toAction(Object item) {
+        if (item instanceof Action) {
+            return (Action) item;
+        } else if (item instanceof String) {
+            final String definition = (String) item;
+            final List<Middleware> definedMiddleware = Optional.ofNullable(middleware)
+                .map(m -> m
+                    .getDefinition()
+                    .getOrDefault(definition, Collections.emptyList())
+                )
+                .orElse(Collections.emptyList());
+            return new DefaultAction(
+                definition + "@" + RANDOM.nextInt(),
+                resolveDataFunction((String) item),
+                definedMiddleware
+            );
+        } else {
+            throw new IllegalArgumentException(
+                "Can not convert " + item + " to Action. "
+                + "Action or '<bean-or-class-name>::<method-name>' string expected."
+            );
+        }
     }
 }
