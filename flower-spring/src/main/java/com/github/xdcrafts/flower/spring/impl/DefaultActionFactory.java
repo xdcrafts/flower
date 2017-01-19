@@ -17,6 +17,7 @@
 package com.github.xdcrafts.flower.spring.impl;
 
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * Spring factory bean for default action that uses bean name as action name.
@@ -25,9 +26,10 @@ import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 public class DefaultActionFactory
     extends AbstractActionFactoryBean<DefaultAction> {
 
-    private final String method;
+    private String method;
 
-    public DefaultActionFactory(String method) {
+    @Required
+    public void setMethod(String method) {
         this.method = method;
     }
 

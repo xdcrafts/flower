@@ -20,6 +20,7 @@ import com.github.xdcrafts.flower.core.Action;
 import com.github.xdcrafts.flower.core.Middleware;
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.security.SecureRandom;
 import java.util.Collections;
@@ -34,17 +35,21 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    private final Object action;
-    private final Map configuration;
-
+    private Object action;
+    private Map configuration;
     private MiddlewareDefinition middleware;
 
     public void setMiddleware(MiddlewareDefinition middleware) {
         this.middleware = middleware;
     }
 
-    public DefaultExtensionFactory(Object action, Map configuration) {
+    @Required
+    public void setAction(Object action) {
         this.action = action;
+    }
+
+    @Required
+    public void setConfiguration(Map configuration) {
         this.configuration = configuration;
     }
 

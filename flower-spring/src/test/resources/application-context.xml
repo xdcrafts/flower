@@ -78,12 +78,12 @@
     <!--                                  Middleware start                                                       -->
 
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <constructor-arg name="shared" value="true"/>
-        <constructor-arg name="definition">
+        <property name="shared" value="true"/>
+        <property name="definition">
             <map>
                 <entry key="selector" value="loggingMiddleware"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Middleware end                                                         -->
@@ -91,7 +91,7 @@
     <!--                                  Actions start                                                          -->
 
     <bean id="selector" class="com.github.xdcrafts.flower.spring.impl.selectors.KeywordSelectorFactory">
-        <constructor-arg name="keyword" value="request.type"/>
+        <property name="keyword" value="request.type"/>
     </bean>
 
     <!--                                  Actions end                                                            -->
@@ -99,13 +99,13 @@
     <!--                                  Flows start                                                            -->
 
     <bean id="mainFlow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
-        <constructor-arg name="actions">
+        <property name="actions">
             <list>
                 <value>authenticator::authenticate</value>
                 <ref bean="selector"/>
                 <value>receiver::receive</value>
             </list>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Flows end                                                              -->

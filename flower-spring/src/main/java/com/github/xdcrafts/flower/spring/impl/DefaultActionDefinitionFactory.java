@@ -17,8 +17,9 @@
 package com.github.xdcrafts.flower.spring.impl;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
@@ -31,16 +32,15 @@ import java.util.Map;
  */
 public class DefaultActionDefinitionFactory implements BeanDefinitionRegistryPostProcessor {
 
-    private final String namespace;
-    private final Map<String, String> actions;
+    private String namespace;
+    private Map<String, String> actions;
 
-    public DefaultActionDefinitionFactory(Map<String, String> actions) {
-        this.namespace = null;
-        this.actions = actions;
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
-    public DefaultActionDefinitionFactory(String namespace, Map<String, String> actions) {
-        this.namespace = namespace;
+    @Required
+    public void setActions(Map<String, String> actions) {
         this.actions = actions;
     }
 
@@ -50,11 +50,11 @@ public class DefaultActionDefinitionFactory implements BeanDefinitionRegistryPos
             final String name = entry.getKey();
             final String qualifiedName = Named.qualifiedName(this.namespace, name);
             final Object method = entry.getValue();
-            final ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
-            constructorArgumentValues.addGenericArgumentValue(method);
+            final MutablePropertyValues propertyValues = new MutablePropertyValues();
+            propertyValues.add("method", method);
             final GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
             beanDefinition.setBeanClass(DefaultActionFactory.class);
-            beanDefinition.setConstructorArgumentValues(constructorArgumentValues);
+            beanDefinition.setPropertyValues(propertyValues);
             registry.registerBeanDefinition(qualifiedName, beanDefinition);
         });
     }

@@ -17,6 +17,7 @@
 package com.github.xdcrafts.flower.spring.impl.flows;
 
 import com.github.xdcrafts.flower.core.impl.flows.AsyncFlow;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 import java.util.Map;
@@ -30,8 +31,12 @@ public class AsyncFlowFactory extends AbstractFlowFactoryBean<AsyncFlow> {
     private List<Object> actions;
     private Map configuration;
 
-    public AsyncFlowFactory(List<Object> actions, Map configuration) {
+    public void setActions(List<Object> actions) {
         this.actions = actions;
+    }
+
+    @Required
+    public void setConfiguration(Map configuration) {
         this.configuration = configuration;
     }
 

@@ -17,6 +17,7 @@
 package com.github.xdcrafts.flower.spring.impl;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import com.github.xdcrafts.flower.core.Middleware;
@@ -38,22 +39,22 @@ public class MiddlewareDefinition implements ApplicationContextAware {
         return Arrays.stream(string.split(SPLITTER_REGEX)).map(String::trim).collect(Collectors.toList());
     }
 
-    private final boolean shared;
-    private final String namespace;
-    private final Map<String, String> rawDefinition;
+    private boolean shared = true;
+    private String namespace;
+    private Map<String, String> rawDefinition;
     private Map<String, List<Middleware>> definition;
 
-    public MiddlewareDefinition(boolean shared, Map<String, String> definition) {
-        this(shared, null, definition);
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
 
-    public MiddlewareDefinition(boolean shared, String namespace, Map<String, String> definition) {
-        if (definition == null) {
-            throw new IllegalArgumentException("'definition' can not be null.");
-        }
-        this.shared = shared;
-        this.rawDefinition = definition;
+    public void setNamespace(String namespace) {
         this.namespace = namespace;
+    }
+
+    @Required
+    public void setDefinition(Map<String, String> definition) {
+        this.rawDefinition = definition;
     }
 
     public boolean isShared() {

@@ -18,6 +18,7 @@ package com.github.xdcrafts.flower.spring.impl.selectors;
 
 import com.github.xdcrafts.flower.core.impl.selectors.KeywordSelector;
 import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * KeywordSelector factory bean.
@@ -26,7 +27,8 @@ public class KeywordSelectorFactory extends AbstractActionFactoryBean<KeywordSel
 
     private String keyword;
 
-    public KeywordSelectorFactory(String keyword) {
+    @Required
+    public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
 

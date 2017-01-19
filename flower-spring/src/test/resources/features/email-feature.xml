@@ -37,13 +37,13 @@
     <!--                                  Middleware start                                                       -->
 
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <constructor-arg name="shared" value="true"/>
-        <constructor-arg name="namespace" value="email"/>
-        <constructor-arg name="definition">
+        <property name="shared" value="true"/>
+        <property name="namespace" value="email"/>
+        <property name="definition">
             <map>
                 <entry key="Validate, Authorize, Send" value="loggingMiddleware"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Middleware end                                                         -->
@@ -51,14 +51,14 @@
     <!--                                  Actions start                                                          -->
 
     <bean class="com.github.xdcrafts.flower.spring.impl.DefaultActionDefinitionFactory">
-        <constructor-arg name="namespace" value="email"/>
-        <constructor-arg name="actions">
+        <property name="namespace" value="email"/>
+        <property name="actions">
             <map>
                 <entry key="Validate" value="email.RequestValidator::validate"/>
                 <entry key="Authorize" value="email.Authorizer::authorize"/>
                 <entry key="Send" value="email.Sender::send"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Actions end                                                            -->
@@ -66,13 +66,13 @@
     <!--                                  Flows start                                                            -->
 
     <bean id="email.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
-        <constructor-arg name="actions">
+        <property name="actions">
             <list>
                 <ref bean="email.Validate"/>
                 <ref bean="email.Authorize"/>
                 <ref bean="email.Send"/>
             </list>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Flows end                                                              -->
@@ -80,22 +80,22 @@
     <!--                                  Extensions start                                                       -->
 
     <bean id="email.Extension" class="com.github.xdcrafts.flower.spring.impl.DefaultExtensionFactory">
-        <constructor-arg name="action" ref="email.Flow"/>
-        <constructor-arg name="configuration">
+        <property name="action" ref="email.Flow"/>
+        <property name="configuration">
             <map>
                 <entry key="keyword-value" value="email"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Extensions end                                                         -->
 
     <bean id="email.Feature" class="com.github.xdcrafts.flower.spring.impl.DefaultFeatureFactory">
-        <constructor-arg name="extensions">
+        <property name="extensions">
             <map>
                 <entry key-ref="email.Extension" value-ref="selector"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
 </beans>

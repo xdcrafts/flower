@@ -9,14 +9,14 @@
         <groupId>com.github.xdcrafts</groupId>
         <artifactId>flower</artifactId>
         <relativePath>..</relativePath>
-        <version>1.3.4</version>
+        <version>1.3.5</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>com.github.xdcrafts</groupId>
             <artifactId>flower-core</artifactId>
-            <version>1.3.4</version>
+            <version>1.3.5</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

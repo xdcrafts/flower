@@ -19,6 +19,7 @@ package com.github.xdcrafts.flower.spring.impl;
 import com.github.xdcrafts.flower.core.Extension;
 import com.github.xdcrafts.flower.core.Selector;
 import com.github.xdcrafts.flower.core.impl.DefaultFeature;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.Map;
 
@@ -27,9 +28,10 @@ import java.util.Map;
  */
 public class DefaultFeatureFactory extends AbstractNameAwareFactoryBean<DefaultFeature> {
 
-    private final Map<Extension, Selector> extensions;
+    private Map<Extension, Selector> extensions;
 
-    public DefaultFeatureFactory(Map<Extension, Selector> extensions) {
+    @Required
+    public void setExtensions(Map<Extension, Selector> extensions) {
         this.extensions = extensions;
     }
 

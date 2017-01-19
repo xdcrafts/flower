@@ -19,13 +19,13 @@
     <!--                                  Middleware start                                                       -->
 
     <bean id="sms.FlowMiddleware" class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <constructor-arg name="shared" value="false"/>
-        <constructor-arg name="namespace" value="sms"/>
-        <constructor-arg name="definition">
+        <property name="shared" value="false"/>
+        <property name="namespace" value="sms"/>
+        <property name="definition">
             <map>
                 <entry key="RequestValidator::validate, Authorizer::authorize, Sender::send" value="loggingMiddleware"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Middleware end                                                         -->
@@ -33,13 +33,13 @@
     <!--                                  Flows start                                                            -->
 
     <bean id="sms.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
-        <constructor-arg name="actions">
+        <property name="actions">
             <list>
                 <value>sms.RequestValidator::validate</value>
                 <value>sms.Authorizer::authorize</value>
                 <value>sms.Sender::send</value>
             </list>
-        </constructor-arg>
+        </property>
         <property name="middleware" ref="sms.FlowMiddleware"/>
     </bean>
 
@@ -48,22 +48,22 @@
     <!--                                  Extensions start                                                       -->
 
     <bean id="sms.Extension" class="com.github.xdcrafts.flower.spring.impl.DefaultExtensionFactory">
-        <constructor-arg name="action" ref="sms.Flow"/>
-        <constructor-arg name="configuration">
+        <property name="action" ref="sms.Flow"/>
+        <property name="configuration">
             <map>
                 <entry key="keyword-value" value="sms"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
     <!--                                  Extensions end                                                         -->
 
     <bean id="sms.Feature" class="com.github.xdcrafts.flower.spring.impl.DefaultFeatureFactory">
-        <constructor-arg name="extensions">
+        <property name="extensions">
             <map>
                 <entry key-ref="sms.Extension" value-ref="selector"/>
             </map>
-        </constructor-arg>
+        </property>
     </bean>
 
 </beans>

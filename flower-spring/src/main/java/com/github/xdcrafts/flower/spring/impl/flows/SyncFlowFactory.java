@@ -17,6 +17,7 @@
 package com.github.xdcrafts.flower.spring.impl.flows;
 
 import com.github.xdcrafts.flower.core.impl.flows.SyncFlow;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,8 @@ public class SyncFlowFactory extends AbstractFlowFactoryBean<SyncFlow> {
 
     private List<Object> actions;
 
-    public SyncFlowFactory(List<Object> actions) {
+    @Required
+    public void setActions(List<Object> actions) {
         this.actions = actions;
     }
 
