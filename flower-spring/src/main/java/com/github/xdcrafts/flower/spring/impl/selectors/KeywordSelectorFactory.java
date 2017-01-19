@@ -26,10 +26,15 @@ import org.springframework.beans.factory.annotation.Required;
 public class KeywordSelectorFactory extends AbstractActionFactoryBean<KeywordSelector> {
 
     private String keyword;
+    private boolean required = true;
 
     @Required
     public void setKeyword(String keyword) {
         this.keyword = keyword;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     @Override
@@ -40,7 +45,7 @@ public class KeywordSelectorFactory extends AbstractActionFactoryBean<KeywordSel
     @Override
     protected KeywordSelector createInstance() throws Exception {
         return new KeywordSelector(
-            getBeanName(), this.keyword, getMiddleware(getBeanName())
+            getBeanName(), this.keyword, this.required, getMiddleware(getBeanName())
         );
     }
 }

@@ -137,7 +137,7 @@ public class FlowerTest {
             secondAction,
             with(new HashMap()).assoc(KeywordSelector.ConfigurationKeys.KEYWORD_VALUE, "second").value()
         );
-        final Selector keywordSelector = new KeywordSelector("aSelector", "data.selectAction");
+        final Selector keywordSelector = new KeywordSelector("aSelector", "data.selectAction", true);
         new DefaultFeature(
             "feature",
             with(new HashMap())

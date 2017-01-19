@@ -24,6 +24,12 @@ import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
  */
 public class PredicateSelectorFactory extends AbstractActionFactoryBean<PredicateSelector> {
 
+    private boolean required;
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
     @Override
     public Class<?> getObjectType() {
         return PredicateSelector.class;
@@ -31,6 +37,6 @@ public class PredicateSelectorFactory extends AbstractActionFactoryBean<Predicat
 
     @Override
     protected PredicateSelector createInstance() throws Exception {
-        return new PredicateSelector(getBeanName(), getMiddleware(getBeanName()));
+        return new PredicateSelector(getBeanName(), this.required, getMiddleware(getBeanName()));
     }
 }

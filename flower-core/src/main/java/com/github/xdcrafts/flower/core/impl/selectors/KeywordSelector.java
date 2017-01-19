@@ -47,16 +47,18 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
 
     private final String name;
     private final String keyword;
+    private final boolean required;
     private final Map<String, Extension> extensions;
 
-    public KeywordSelector(String name, String keyword) {
-        this(name, keyword, Collections.emptyList());
+    public KeywordSelector(String name, String keyword, boolean required) {
+        this(name, keyword, required, Collections.emptyList());
     }
 
-    public KeywordSelector(String name, String keyword, List<Middleware> middleware) {
+    public KeywordSelector(String name, String keyword, boolean required, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
         this.keyword = keyword;
+        this.required = required;
         this.extensions = new ConcurrentHashMap<>();
         this.meta.put(Core.ActionMeta.NAME, name);
         this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
@@ -87,6 +89,15 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
         } else {
             throw new IllegalArgumentException("'" + this.keyword + "' should be a String or Collection<String>.");
         }
+        if (keywordValues.isEmpty()) {
+            if (this.required) {
+                throw new IllegalArgumentException(
+                    "Unable to select action, '" + this.keyword + "' non empty value required"
+                );
+            } else {
+                return Collections.emptyList();
+            }
+        }
         final List<Action> actions = keywordValues
             .stream()
             .map(value -> Optional.ofNullable(this.extensions.get(value)))
@@ -94,9 +105,13 @@ public class KeywordSelector extends WithMiddlewareSelectorBase {
             .map(Optional::get)
             .collect(Collectors.toList());
         if (actions.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Unable to select action, '" + keywordValue + "' is unknown keyword value."
-            );
+            if (this.required) {
+                throw new IllegalArgumentException(
+                    "Unable to select action, '" + keywordValue + "' is unknown keyword value."
+                );
+            } else {
+                return Collections.emptyList();
+            }
         }
         return actions;
     }

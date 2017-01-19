@@ -45,15 +45,17 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
     }
 
     private final String name;
+    private final boolean required;
     private final Map<Predicate, Extension> extensions;
 
-    public PredicateSelector(String name) {
-        this(name, Collections.emptyList());
+    public PredicateSelector(String name, boolean required) {
+        this(name, required, Collections.emptyList());
     }
 
-    public PredicateSelector(String name, List<Middleware> middleware) {
+    public PredicateSelector(String name, boolean required, List<Middleware> middleware) {
         super(middleware);
         this.name = name;
+        this.required = required;
         this.extensions = new ConcurrentHashMap<>();
         this.meta.put(Core.ActionMeta.NAME, name);
         this.meta.put(Core.ActionMeta.TYPE, getClass().getName());
@@ -79,7 +81,11 @@ public class PredicateSelector extends WithMiddlewareSelectorBase {
             .map(Map.Entry::getValue)
             .collect(Collectors.toList());
         if (actions.isEmpty()) {
-            throw new IllegalArgumentException("Unable to select action, no suitable action found.");
+            if (this.required) {
+                throw new IllegalArgumentException("Unable to select action, no suitable action found.");
+            } else {
+                return Collections.emptyList();
+            }
         }
         return actions;
     }
