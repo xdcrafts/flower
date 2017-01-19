@@ -25,8 +25,6 @@ import com.github.xdcrafts.flower.core.impl.selectors.KeywordSelector;
 import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
 import com.github.xdcrafts.flower.core.impl.flows.SyncFlow;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,8 +47,6 @@ import static org.junit.Assert.assertTrue;
  */
 @SuppressWarnings("unchecked")
 public class FlowerTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FlowerTest.class);
 
     private static final class ConclusionValue {
         private final boolean success;
