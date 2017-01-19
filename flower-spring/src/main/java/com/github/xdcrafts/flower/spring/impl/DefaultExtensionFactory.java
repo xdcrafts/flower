@@ -80,9 +80,9 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
                 definedMiddleware
             );
         } else {
-            throw new IllegalArgumentException(
-                "Can not convert " + item + " to Action. "
-                + "Action or '<bean-or-class-name>::<method-name>' string expected."
+            return new DefaultAction(
+                item.getClass() + "@" + RANDOM.nextInt(),
+                getDataFunctionExtractor().apply(item, DEFAULT_FUNCTION)
             );
         }
     }

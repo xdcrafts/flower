@@ -71,12 +71,25 @@ public final class ClassApi {
         return Optional.ofNullable(result);
     }
 
+    private static Class findAssignableAncestor(Class<?> from, Class<?> to) {
+        return Optional
+            .<Class>ofNullable(from.getSuperclass())
+            .filter(to::isAssignableFrom)
+            .orElse(
+                Arrays
+                    .stream(from.getInterfaces())
+                    .filter(to::isAssignableFrom)
+                    .findFirst()
+                    .orElse(null)
+            );
+    }
+
     /**
      * Calculates distance between from and to classes, counting from current.
      */
     private static int classDistance(Class<?> from, Class<?> to, int current) {
         return to.isAssignableFrom(from)
-            ? to.equals(from) ? current : classDistance(from.getSuperclass(), to, current + 1)
+            ? to.equals(from) ? current : classDistance(findAssignableAncestor(from, to), to, current + 1)
             : -1;
     }
 
@@ -100,23 +113,45 @@ public final class ClassApi {
     }
 
     /**
+     * Recursively collects all declared methods of the clazz and it's ancestors.
+     */
+    public static Map<String, List<Method>> getDeclaredMethodsRecursively(Class clazz) {
+        final Map<String, List<Method>> current = Arrays
+            .stream(clazz.getDeclaredMethods())
+            .filter(m -> !m.getName().startsWith("lambda"))
+            .collect(Collectors.groupingBy(Method::getName));
+        for (Class interfaceClazz : clazz.getInterfaces()) {
+            getDeclaredMethodsRecursively(interfaceClazz).forEach(current::putIfAbsent);
+        }
+        if (clazz.getSuperclass() != null) {
+            getDeclaredMethodsRecursively(clazz.getSuperclass()).forEach(current::putIfAbsent);
+        }
+        return current;
+    }
+
+    /**
      * Finds method with name, throws exception if no method found or there are many of them.
      */
     public static Method findMethod(Class clazz, String methodName) {
-        final List<Method> methods = Arrays.stream(clazz.getDeclaredMethods())
-            .filter(m -> m.getName().equals(methodName))
-            .collect(Collectors.toList());
+        final List<Method> methods = getDeclaredMethodsRecursively(clazz).get(methodName);
         if (methods.isEmpty()) {
             throw new IllegalArgumentException(clazz.getName() + "::" + methodName + " not found");
         }
+        final List<Method> specificMethods;
         if (methods.size() > 1) {
+            specificMethods
+                = methods.stream().filter(m -> m.getReturnType() != Object.class).collect(Collectors.toList());
+        } else {
+            specificMethods = methods;
+        }
+        if (specificMethods.size() != 1) {
             throw new IllegalArgumentException(
                 clazz.getName() + "::" + methodName
                 + " more then one method found, can not decide which one to use. "
                 + methods
             );
         }
-        return methods.get(0);
+        return specificMethods.get(0);
     }
 
     /**

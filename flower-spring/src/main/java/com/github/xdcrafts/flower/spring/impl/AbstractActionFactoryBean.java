@@ -37,7 +37,8 @@ public abstract class AbstractActionFactoryBean<T>
     extends AbstractNameAwareFactoryBean<T>
     implements ApplicationContextAware {
 
-    private static final String SPLITTER = "::";
+    protected static final String DEFAULT_FUNCTION = "apply";
+    protected static final String SPLITTER = "::";
 
     private ApplicationContext applicationContext;
     private DataFunctionExtractor dataFunctionExtractor;
@@ -55,15 +56,26 @@ public abstract class AbstractActionFactoryBean<T>
         return applicationContext;
     }
 
+    public DataFunctionExtractor getDataFunctionExtractor() {
+        return dataFunctionExtractor;
+    }
+
     protected Function<Map, Map> resolveDataFunction(String definition) {
-        final String[] subjectAndMethod = definition.split(SPLITTER);
-        if (subjectAndMethod.length != 2) {
-            throw new IllegalArgumentException(
-                "Invalid action declaration: <class-or-bean-name>::<method-name> expected."
-            );
+        final String subject;
+        final String method;
+        if (definition.contains(SPLITTER)) {
+            final String[] subjectAndMethod = definition.split(SPLITTER);
+            if (subjectAndMethod.length != 2) {
+                throw new IllegalArgumentException(
+                    "Invalid action declaration: <class-or-bean-name>::<method-name> expected."
+                );
+            }
+            subject = subjectAndMethod[0];
+            method = subjectAndMethod[1];
+        } else {
+            subject = definition;
+            method = DEFAULT_FUNCTION;
         }
-        final String subject = subjectAndMethod[0];
-        final String method = subjectAndMethod[1];
         final Object classOrBean;
         try {
             classOrBean = this.getApplicationContext().containsBean(subject)
