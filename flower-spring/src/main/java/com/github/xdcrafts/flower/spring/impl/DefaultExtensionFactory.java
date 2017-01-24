@@ -22,7 +22,9 @@ import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
 import org.springframework.beans.factory.annotation.Required;
 
+import java.lang.invoke.MethodHandles;
 import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -66,17 +68,28 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
             return (Action) item;
         } else if (item instanceof String) {
             final String definition = (String) item;
-            final List<Middleware> definedMiddleware = getMiddleware(definition);
             return new DefaultAction(
                 definition + "@" + RANDOM.nextInt(),
                 resolveDataFunction((String) item),
-                definedMiddleware
+                getMiddleware(definition)
             );
         } else {
-            final String name = item.getClass().getName();
+            String name;
+            List<Middleware> middleware;
+            try {
+                name = (String) MethodHandles
+                    .lookup()
+                    .findGetter(item.getClass(), "name", String.class)
+                    .invoke();
+                middleware = getMiddleware(name);
+            } catch (Throwable t) {
+                name  = item.getClass().getName();
+                middleware = Collections.emptyList();
+            }
             return new DefaultAction(
                 name + "@" + RANDOM.nextInt(),
-                getDataFunctionExtractor().apply(item, DEFAULT_FUNCTION)
+                getDataFunctionExtractor().apply(item, DEFAULT_FUNCTION),
+                middleware
             );
         }
     }
