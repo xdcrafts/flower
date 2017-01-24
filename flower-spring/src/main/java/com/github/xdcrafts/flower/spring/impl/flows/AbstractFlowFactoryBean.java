@@ -20,12 +20,9 @@ import com.github.xdcrafts.flower.core.Action;
 import com.github.xdcrafts.flower.core.Middleware;
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.spring.impl.AbstractActionFactoryBean;
-import com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition;
 
 import java.security.SecureRandom;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Abstract flow factory bean.
@@ -35,12 +32,6 @@ public abstract class AbstractFlowFactoryBean<T> extends AbstractActionFactoryBe
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    private MiddlewareDefinition middleware;
-
-    public void setMiddleware(MiddlewareDefinition middleware) {
-        this.middleware = middleware;
-    }
-
     /**
      * Convert supplied object to of action if possible.
      */
@@ -49,20 +40,16 @@ public abstract class AbstractFlowFactoryBean<T> extends AbstractActionFactoryBe
             return (Action) item;
         } else if (item instanceof String) {
             final String definition = (String) item;
-            final List<Middleware> definedMiddleware = Optional.ofNullable(middleware)
-                .map(m -> m
-                    .getDefinition()
-                    .getOrDefault(definition, Collections.emptyList())
-                )
-                .orElse(Collections.emptyList());
+            final List<Middleware> definedMiddleware = getMiddleware(definition);
             return new DefaultAction(
                 definition + "@" + RANDOM.nextInt(),
                 resolveDataFunction((String) item),
                 definedMiddleware
             );
         } else {
+            final String name = item.getClass().getName();
             return new DefaultAction(
-                item.getClass() + "@" + RANDOM.nextInt(),
+                name + "@" + RANDOM.nextInt(),
                 getDataFunctionExtractor().apply(item, DEFAULT_FUNCTION)
             );
         }

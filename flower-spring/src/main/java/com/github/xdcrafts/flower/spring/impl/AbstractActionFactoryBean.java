@@ -95,7 +95,6 @@ public abstract class AbstractActionFactoryBean<T>
             .getBeansOfType(MiddlewareDefinition.class, true, false)
             .values()
             .stream()
-            .filter(MiddlewareDefinition::isShared)
             .flatMap(d -> d.getDefinition().entrySet().stream())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
             .get(name);

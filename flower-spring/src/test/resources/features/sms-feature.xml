@@ -19,7 +19,6 @@
     <!--                                  Middleware start                                                       -->
 
     <bean id="sms.FlowMiddleware" class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <property name="shared" value="false"/>
         <property name="namespace" value="sms"/>
         <property name="definition">
             <map>
@@ -40,7 +39,6 @@
                 <value>sms.Sender::send</value>
             </list>
         </property>
-        <property name="middleware" ref="sms.FlowMiddleware"/>
     </bean>
 
     <!--                                  Flows end                                                              -->

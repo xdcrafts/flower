@@ -78,7 +78,6 @@
     <!--                                  Middleware start                                                       -->
 
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <property name="shared" value="true"/>
         <property name="definition">
             <map>
                 <entry key="selector" value="loggingMiddleware"/>

@@ -23,10 +23,8 @@ import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.security.SecureRandom;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Spring factory bean for default extension that uses bean name as it's name.
@@ -37,11 +35,6 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
 
     private Object action;
     private Map configuration;
-    private MiddlewareDefinition middleware;
-
-    public void setMiddleware(MiddlewareDefinition middleware) {
-        this.middleware = middleware;
-    }
 
     @Required
     public void setAction(Object action) {
@@ -73,20 +66,16 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
             return (Action) item;
         } else if (item instanceof String) {
             final String definition = (String) item;
-            final List<Middleware> definedMiddleware = Optional.ofNullable(middleware)
-                .map(m -> m
-                    .getDefinition()
-                    .getOrDefault(definition, Collections.emptyList())
-                )
-                .orElse(Collections.emptyList());
+            final List<Middleware> definedMiddleware = getMiddleware(definition);
             return new DefaultAction(
                 definition + "@" + RANDOM.nextInt(),
                 resolveDataFunction((String) item),
                 definedMiddleware
             );
         } else {
+            final String name = item.getClass().getName();
             return new DefaultAction(
-                item.getClass() + "@" + RANDOM.nextInt(),
+                name + "@" + RANDOM.nextInt(),
                 getDataFunctionExtractor().apply(item, DEFAULT_FUNCTION)
             );
         }

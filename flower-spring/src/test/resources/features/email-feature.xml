@@ -37,7 +37,6 @@
     <!--                                  Middleware start                                                       -->
 
     <bean class="com.github.xdcrafts.flower.spring.impl.MiddlewareDefinition">
-        <property name="shared" value="true"/>
         <property name="namespace" value="email"/>
         <property name="definition">
             <map>
