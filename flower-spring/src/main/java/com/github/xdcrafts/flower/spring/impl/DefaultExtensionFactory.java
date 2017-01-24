@@ -20,9 +20,9 @@ import com.github.xdcrafts.flower.core.Action;
 import com.github.xdcrafts.flower.core.Middleware;
 import com.github.xdcrafts.flower.core.impl.actions.DefaultAction;
 import com.github.xdcrafts.flower.core.impl.extensions.DefaultExtension;
+import com.github.xdcrafts.flower.tools.ClassApi;
 import org.springframework.beans.factory.annotation.Required;
 
-import java.lang.invoke.MethodHandles;
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
@@ -77,10 +77,9 @@ public class DefaultExtensionFactory extends AbstractActionFactoryBean<DefaultEx
             String name;
             List<Middleware> middleware;
             try {
-                name = (String) MethodHandles
-                    .lookup()
-                    .findGetter(item.getClass(), "name", String.class)
-                    .invoke();
+                name = (String) ClassApi
+                    .findMethod(item.getClass(), "getName")
+                    .invoke(item);
                 middleware = getMiddleware(name);
             } catch (Throwable t) {
                 name  = item.getClass().getName();
