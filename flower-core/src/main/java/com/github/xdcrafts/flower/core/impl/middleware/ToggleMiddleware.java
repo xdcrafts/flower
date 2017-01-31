@@ -43,10 +43,6 @@ public class ToggleMiddleware implements Middleware, Supplier<Boolean> {
         this.isEnabled = enabled;
     }
 
-    public void setEnabled(String enabled) {
-        this.isEnabled = Boolean.valueOf(enabled);
-    }
-
     @Override
     public String getName() {
         return this.name;

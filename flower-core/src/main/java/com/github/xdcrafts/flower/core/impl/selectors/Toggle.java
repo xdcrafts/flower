@@ -37,10 +37,6 @@ public class Toggle implements Predicate<Map> {
         isEnabled = enabled;
     }
 
-    public void setEnabled(String enabled) {
-        this.isEnabled = Boolean.valueOf(enabled);
-    }
-
     @Override
     public boolean test(Map map) {
         return this.isEnabled;
