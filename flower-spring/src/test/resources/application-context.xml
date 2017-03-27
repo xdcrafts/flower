@@ -18,9 +18,12 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:f="http://xdcrafts.github.com/schema/flower"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://xdcrafts.github.com/schema/flower
+        http://xdcrafts.github.com/schema/flower.xsd">
 
     <import resource="classpath*:middleware.xml"/>
     <import resource="classpath*:features/*-feature.xml"/>
@@ -89,9 +92,7 @@
 
     <!--                                  Actions start                                                          -->
 
-    <bean id="selector" class="com.github.xdcrafts.flower.spring.impl.selectors.KeywordSelectorFactory">
-        <property name="keyword" value="request.type"/>
-    </bean>
+    <f:keyword-selector id="selector" keyword="request.type" required="true"/>
 
     <!--                                  Actions end                                                            -->
 

@@ -18,8 +18,11 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:f="http://xdcrafts.github.com/schema/flower"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
+                           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                           http://xdcrafts.github.com/schema/flower
+                           http://xdcrafts.github.com/schema/flower.xsd"
        profile="email-feature">
 
     <bean class="com.github.xdcrafts.flower.core.spring.example.email.EmailRequestValidatorMethodConverter"/>
@@ -78,24 +81,15 @@
 
     <!--                                  Extensions start                                                       -->
 
-    <bean id="email.Extension" class="com.github.xdcrafts.flower.spring.impl.DefaultExtensionFactory">
-        <property name="action" ref="email.Flow"/>
-        <property name="configuration">
-            <map>
-                <entry key="keyword-value" value="email"/>
-            </map>
-        </property>
-    </bean>
+    <f:extension id="email.Extension" action="email.Flow">
+        <f:keyword-value>email</f:keyword-value>
+    </f:extension>
 
     <!--                                  Extensions end                                                         -->
 
-    <bean id="email.Feature" class="com.github.xdcrafts.flower.spring.impl.DefaultFeatureFactory">
-        <property name="extensions">
-            <map>
-                <entry key-ref="email.Extension" value-ref="selector"/>
-            </map>
-        </property>
-    </bean>
+    <f:feature id="email.Feature">
+        <f:binding extension="email.Extension" selector="selector"/>
+    </f:feature>
 
 </beans>
 
