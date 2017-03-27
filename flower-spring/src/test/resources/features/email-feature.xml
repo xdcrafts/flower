@@ -67,15 +67,11 @@
 
     <!--                                  Flows start                                                            -->
 
-    <bean id="email.Flow" class="com.github.xdcrafts.flower.spring.impl.flows.SyncFlowFactory">
-        <property name="actions">
-            <list>
-                <ref bean="email.Validate"/>
-                <ref bean="email.Authorize"/>
-                <ref bean="email.Send"/>
-            </list>
-        </property>
-    </bean>
+    <f:sync-flow id="email.Flow">
+        <f:action>email.Validate</f:action>
+        <f:action>email.Authorize</f:action>
+        <f:action>email.Send</f:action>
+    </f:sync-flow>
 
     <!--                                  Flows end                                                              -->
 

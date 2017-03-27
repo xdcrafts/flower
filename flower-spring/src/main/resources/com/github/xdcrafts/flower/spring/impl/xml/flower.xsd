@@ -21,6 +21,22 @@
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
+    <xsd:element name="sync-flow">
+        <xsd:complexType>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element name="action" type="xsd:string"/>
+                <xsd:element name="method" type="xsd:string"/>
+            </xsd:choice>
+            <xsd:attribute name="id" type="xsd:ID">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+                        The unique identifier for a bean.
+                    ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
     <xsd:element name="keyword-selector">
         <xsd:complexType>
             <xsd:attribute name="id" type="xsd:ID">

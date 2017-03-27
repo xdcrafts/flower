@@ -24,6 +24,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class FlowerNamespaceHandler extends NamespaceHandlerSupport {
     @Override
     public void init() {
+        registerBeanDefinitionParser("sync-flow", new SyncFlowBeanDefinitionHandler());
         registerBeanDefinitionParser("keyword-selector", new KeywordSelectorBeanDefinitionHandler());
         registerBeanDefinitionParser("predicate-selector", new PredicateSelectorBeanDefinitionHandler());
         registerBeanDefinitionParser("extension", new ExtensionBeanDefinitionHandler());
