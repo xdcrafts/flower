@@ -14,30 +14,31 @@
  * language governing permissions and limitations under the License.
  */
 
-package com.github.xdcrafts.flower.sage;
+package com.github.xdcrafts.flower.sage.impl;
 
-import java.util.List;
-import java.util.function.Predicate;
+import com.github.xdcrafts.flower.sage.Spec;
+
+import java.util.Map;
 
 /**
- * Common spec interface.
+ * Validation definition class.
  */
-public interface Spec extends Predicate {
+public class SpecToActionDefinitions {
 
-    /**
-     * Performs conform for specified value.
-     */
-    Conformance conform(Object value);
+    private final Map<Spec, String> specActions;
 
-    /**
-     * Performs validation of specified value.
-     */
-    default List<Issue> validate(Object value) {
-        return conform(value).getIssues();
+    public SpecToActionDefinitions(Map<Spec, String> specActions) {
+        this.specActions = specActions;
+    }
+
+    public Map<Spec, String> getSpecActions() {
+        return specActions;
     }
 
     @Override
-    default boolean test(Object t) {
-        return validate(t).isEmpty();
+    public String toString() {
+        return "SpecToActionDefinitions{"
+                + "specActions=" + specActions
+                + '}';
     }
 }

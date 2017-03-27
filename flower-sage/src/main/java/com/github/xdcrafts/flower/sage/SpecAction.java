@@ -16,28 +16,27 @@
 
 package com.github.xdcrafts.flower.sage;
 
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
 
 /**
- * Common spec interface.
+ * Spec action class.
  */
-public interface Spec extends Predicate {
+public class SpecAction {
 
-    /**
-     * Performs conform for specified value.
-     */
-    Conformance conform(Object value);
+    private final String specKey;
 
-    /**
-     * Performs validation of specified value.
-     */
-    default List<Issue> validate(Object value) {
-        return conform(value).getIssues();
+    public SpecAction(String specKey) {
+        this.specKey = specKey;
     }
 
-    @Override
-    default boolean test(Object t) {
-        return validate(t).isEmpty();
+    /**
+     * Performs context validation.
+     */
+    public Map validate(Map context) {
+        final Conformance conformance = ((Spec) context.get(this.specKey)).conform(context);
+        if (!conformance.isCorrect()) {
+            throw new RuntimeException();
+        }
+        return (Map) conformance.getValue();
     }
 }

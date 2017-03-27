@@ -16,28 +16,15 @@
 
 package com.github.xdcrafts.flower.sage;
 
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 /**
- * Common spec interface.
+ * Validation registry interface.
  */
-public interface Spec extends Predicate {
+public interface SpecRegistry {
 
     /**
-     * Performs conform for specified value.
+     * Returns optional spec by keyword.
      */
-    Conformance conform(Object value);
-
-    /**
-     * Performs validation of specified value.
-     */
-    default List<Issue> validate(Object value) {
-        return conform(value).getIssues();
-    }
-
-    @Override
-    default boolean test(Object t) {
-        return validate(t).isEmpty();
-    }
+    Optional<Spec> get(String keyword);
 }
