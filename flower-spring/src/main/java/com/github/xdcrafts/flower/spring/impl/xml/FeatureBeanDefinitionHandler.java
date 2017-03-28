@@ -16,8 +16,6 @@
 
 package com.github.xdcrafts.flower.spring.impl.xml;
 
-import com.github.xdcrafts.flower.core.Extension;
-import com.github.xdcrafts.flower.core.Selector;
 import com.github.xdcrafts.flower.spring.impl.DefaultFeatureFactory;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -38,13 +36,11 @@ public class FeatureBeanDefinitionHandler extends AbstractSingleBeanDefinitionPa
 
     protected void doParse(Element element, BeanDefinitionBuilder bean) {
         final ManagedMap<Object, Object> extensions = new ManagedMap<>();
-        extensions.setKeyTypeName(Extension.class.getTypeName());
-        extensions.setValueTypeName(Selector.class.getTypeName());
         final NodeList bindingNodes = element
             .getElementsByTagNameNS("http://xdcrafts.github.com/schema/flower", "binding");
         if (bindingNodes != null && bindingNodes.getLength() != 0) {
             for (int i = 0; i < bindingNodes.getLength(); i++) {
-                final Node bindingNode = bindingNodes.item(0);
+                final Node bindingNode = bindingNodes.item(i);
                 final String extension = bindingNode
                     .getAttributes()
                     .getNamedItem("extension")
