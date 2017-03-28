@@ -5,7 +5,7 @@
     <groupId>com.github.xdcrafts</groupId>
     <artifactId>flower</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Data-driven workflows with Java.</description>
     <url>https://github.com/xdcrafts/flower</url>

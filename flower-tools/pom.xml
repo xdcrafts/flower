@@ -9,7 +9,7 @@
         <groupId>com.github.xdcrafts</groupId>
         <artifactId>flower</artifactId>
         <relativePath>..</relativePath>
-        <version>1.4.0</version>
+        <version>1.4.1</version>
     </parent>
 
     <dependencies>
